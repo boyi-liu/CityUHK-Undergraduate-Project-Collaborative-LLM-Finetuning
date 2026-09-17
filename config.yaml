@@ -1,0 +1,18 @@
+# basic config
+alg: fedit
+suffix: default
+device: 3
+dataset: sst2
+model: roberta-base
+
+# federated config
+cn: 5
+sr: 1
+rnd: 20
+tg: 1
+
+# local training config
+bs: 4
+grad_accum: 8
+epoch: 1
+lr: 2e-4

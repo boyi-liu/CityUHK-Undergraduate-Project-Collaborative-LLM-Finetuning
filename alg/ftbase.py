@@ -1,0 +1,95 @@
+import os
+import random
+
+from peft import get_peft_model
+from utils.data_utils import load_data
+from utils.sys_utils import device_config
+from utils.train_utils import Trainer
+from utils.eval_utils import Evaluator
+from alg.base import BaseClient, BaseServer
+from utils.model_utils import load_model, load_tokenizer, load_lora_config
+from utils.time_utils import time_record
+
+
+class FTBaseClient(BaseClient):
+    def __init__(self, id, args):
+        super().__init__(id, args)
+        self.tokenizer = load_tokenizer(args)
+        self.dataset = load_data(args=args, idx=self.id)
+        self.lora = {}
+        self.trainer = Trainer(args=args, dataset=self.dataset, client=self)
+        self.evaluator = Evaluator(args=args, dataset=self.dataset)
+
+    @time_record
+    def run(self, model):
+        self.trainer.train(model)
+        self.lora = {k: v.clone() for k, v in model.state_dict().items() if "lora_" in k}
+
+    def local_test(self, model):
+        return self.evaluator.evaluate(model, round_idx=self.server.round, client_id=self.id)
+
+class FTBaseServer(BaseServer):
+    def __init__(self, args, clients):
+        super().__init__(args, clients)
+        self.model = get_peft_model(load_model(args), load_lora_config(args))
+
+        self.global_lora = {k: v.clone() for k, v in self.model.state_dict().items() if "lora_" in k}
+        self.sample_rate = args.sr
+        self.wall_clock_time = 0
+        self.round = 0
+
+        for client, delay in zip(clients, device_config(args)): client.delay = delay
+
+    def run(self):
+        self.sample()
+        self.local_run()
+        self.aggregate()
+
+    def sample(self):
+        sample_num = int(self.sample_rate * len(self.clients))
+        self.sampled_clients = sorted(random.sample(self.clients, sample_num), key=lambda x: x.id)
+
+    def local_run(self):
+        for client in self.sampled_clients:
+            client.run(self.model)
+            self.model.load_state_dict(self.global_lora, strict=False)
+        self.wall_clock_time += max([c.training_time for c in self.sampled_clients])
+
+    def aggregate(self):
+        data_sum = sum([len(client.dataset['train']) for client in self.sampled_clients])
+        from collections import defaultdict
+        aggregated = defaultdict(lambda: 0)
+
+        for client in self.sampled_clients:
+            model = client.lora
+            for k, v in model.items():
+                aggregated[k] = aggregated[k] + v * len(client.dataset['train']) / data_sum
+
+        self.global_lora = aggregated
+        self.model.load_state_dict(self.global_lora, strict=False)
+        print("Aggregated model updated.")
+
+    def test_all(self):
+        all_metrics = []
+        for client in self.clients:
+            print(f"Testing on client {client.id} ...")
+            metrics = client.local_test(self.model)
+            all_metrics.append(metrics)
+
+        res_dict = {}
+        for k in all_metrics[0].keys():
+            res_dict[k] = sum(m[k] for m in all_metrics) / len(all_metrics)
+
+        return res_dict
+
+    def save_adapter(self):
+        import torch
+        args = self.args
+        name = (
+            f'{args.alg}_{args.dataset}_{args.model}_'
+            f'{args.cn}c_{args.epoch}E_lr{args.lr}'
+        )
+        adapter_path = os.path.join(args.suffix, 'adapter', name)
+        os.makedirs(adapter_path, exist_ok=True)
+        torch.save(dict(self.global_lora), os.path.join(adapter_path, 'lora_weights.pt'))
+        print(f'Adapter saved to {adapter_path}')

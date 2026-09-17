@@ -1,0 +1,3 @@
+client_num: 10
+dir_path: gsm8k
+split: uniform  # uniform/dir/...
