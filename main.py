@@ -5,6 +5,7 @@ import os
 
 from utils.logger import get_logger
 from utils.options import args_parser
+from utils.eval_utils import get_dataset_config
 from tqdm import tqdm
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -12,6 +13,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 class FedSim:
     def __init__(self, args):
         self.args = args
+        args.task_type = get_dataset_config(args.dataset)['task_type']
         args.suffix = f'exp/{args.suffix}'
         self.logger = get_logger(args)
 

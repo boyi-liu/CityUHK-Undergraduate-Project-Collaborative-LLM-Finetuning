@@ -1,2 +1,11 @@
 .DS_Store
 **/.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+exp/
+dataset/*_raw/
+dataset/*/train/
+dataset/*/test/
+*.pt
+*.safetensors
