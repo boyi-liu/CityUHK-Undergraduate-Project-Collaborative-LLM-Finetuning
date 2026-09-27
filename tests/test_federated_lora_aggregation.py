@@ -2,10 +2,10 @@ import unittest
 
 import torch
 
-from point2.runner import interpolate, weighted_mean
+from federated_lora.runner import interpolate, weighted_mean
 
 
-class Point2AggregationTests(unittest.TestCase):
+class FederatedLoraAggregationTests(unittest.TestCase):
     def test_weighted_aggregation_preserves_both_factors(self):
         updates = [
             {"example_count": 1, "adapter": {"lora_A": torch.tensor([1.0]), "lora_B": torch.tensor([2.0])}},

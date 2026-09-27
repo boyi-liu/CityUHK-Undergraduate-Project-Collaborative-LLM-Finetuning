@@ -1,8 +1,7 @@
-"""Single-GPU LoRA training and held-out validation for simulated clients."""
+"""Single-GPU LoRA training for simulated clients."""
 
 from __future__ import annotations
 
-import math
 import random
 import time
 from contextlib import nullcontext
@@ -133,31 +132,3 @@ def train_client(model, encoded: list[dict], config: dict, device: torch.device,
         torch.cuda.synchronize()
     elapsed = time.perf_counter() - started
     return adapter_state(model), sum(losses) / len(losses), elapsed
-
-
-@torch.no_grad()
-def evaluate(model, encoded: list[dict], config: dict, device: torch.device,
-             pad_token_id: int) -> dict[str, float]:
-    model.eval()
-    limit = min(config["training"]["eval_limit"], len(encoded))
-    total_loss = 0.0
-    total_tokens = 0
-    for row in encoded[:limit]:
-        batch = collate([row], pad_token_id, device)
-        with _autocast(device):
-            loss = model(**batch).loss
-        tokens = int((batch["labels"][:, 1:] != -100).sum())
-        if tokens:
-            total_loss += float(loss) * tokens
-            total_tokens += tokens
-    if total_tokens == 0:
-        raise ValueError("Evaluation examples contain no response tokens")
-    mean_loss = total_loss / total_tokens
-    if not math.isfinite(mean_loss):
-        raise FloatingPointError("Non-finite evaluation loss")
-    return {
-        "loss": mean_loss,
-        "perplexity": math.exp(mean_loss) if mean_loss < 20 else None,
-        "examples": limit,
-        "response_tokens": total_tokens,
-    }

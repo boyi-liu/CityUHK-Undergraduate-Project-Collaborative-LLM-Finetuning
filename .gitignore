@@ -5,8 +5,10 @@ __pycache__/
 .venv/
 exp/
 dataset/*_raw/
-dataset/*/train/
-dataset/*/test/
-dataset/point2_alpaca_*/
+dataset/*_alpaca_*/
+dataset/alpaca_client_splits_*/
+dataset/alpaca_classification_checkpoints/
+dataset/*.partial.jsonl
+dataset/*.tmp
 *.pt
 *.safetensors

@@ -13,7 +13,7 @@ import torch
 import yaml
 
 from .data import load_prepared
-from .training import adapter_state, encode_rows, evaluate, load_adapter, load_training_model, train_client
+from .training import adapter_state, encode_rows, load_adapter, load_training_model, train_client
 
 
 def weighted_mean(updates: list[dict]) -> dict[str, torch.Tensor]:
@@ -51,12 +51,14 @@ def _save_progress(run_dir: Path, state: dict, config: dict, manifest: dict) -> 
 
 
 def _configuration_id(config: dict, manifest: dict) -> str:
-    payload = json.dumps({"config": config, "source_sha256": manifest["source_sha256"]}, sort_keys=True)
+    payload = json.dumps({"config": config, "format_version": manifest["format_version"],
+                          "source_sha256": manifest["source_sha256"],
+                          "task_groups_sha256": manifest["task_groups_sha256"]}, sort_keys=True)
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
 def run(config: dict, root: Path, resume: bool = False) -> dict:
-    clients, val_rows, test_rows, manifest = load_prepared(config, root)
+    clients, manifest = load_prepared(config, root)
     config_id = _configuration_id(config, manifest)
     run_dir = root / config["output_dir"] / config["federation"]["mode"]
     checkpoint = run_dir / "checkpoint.pt"
@@ -70,10 +72,8 @@ def run(config: dict, root: Path, resume: bool = False) -> dict:
         torch.cuda.manual_seed_all(config["seed"])
     model, tokenizer, device = load_training_model(config)
     if device.type != "cuda":
-        raise RuntimeError("Point 2 real-model training requires a CUDA GPU")
+        raise RuntimeError("Real-model federated LoRA training requires a CUDA GPU")
     encoded_clients = [encode_rows(rows, tokenizer, config["model"]["max_length"]) for rows in clients]
-    val = encode_rows(val_rows, tokenizer, config["model"]["max_length"])
-    test = encode_rows(test_rows, tokenizer, config["model"]["max_length"])
     rng = random.Random(config["seed"])
     if resume:
         state = torch.load(checkpoint, map_location="cpu", weights_only=False)
@@ -115,9 +115,6 @@ def run(config: dict, root: Path, resume: bool = False) -> dict:
         }
 
     def record(event: dict) -> None:
-        if state["completed"] % fed["eval_every"] == 0:
-            load_adapter(model, state["adapter"])
-            event["validation"] = evaluate(model, val, config, device, pad_id)
         state["history"].append(event)
         state["rng_state"] = rng.getstate()
         _save_progress(run_dir, state, config, manifest)
@@ -172,13 +169,17 @@ def run(config: dict, root: Path, resume: bool = False) -> dict:
                 "virtual_time": state["virtual_time"],
             })
 
-    load_adapter(model, state["adapter"])
+    train_losses = []
+    for event in state["history"]:
+        if "client_losses" in event:
+            train_losses.extend(event["client_losses"])
+        else:
+            train_losses.append(event["train_loss"])
     final = {
         "mode": fed["mode"], "version": state["version"],
         "completed": state["completed"], "launched": state["launched"],
         "virtual_time": state["virtual_time"],
-        "validation": evaluate(model, val, config, device, pad_id),
-        "test": evaluate(model, test, config, device, pad_id),
+        "mean_client_train_loss": sum(train_losses) / len(train_losses),
         "gpu": torch.cuda.get_device_name(0),
     }
     run_dir.mkdir(parents=True, exist_ok=True)

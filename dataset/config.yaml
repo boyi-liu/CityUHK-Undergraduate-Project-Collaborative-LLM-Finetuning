@@ -1,8 +1,0 @@
-client_num: 10
-dir_path: alpaca
-split: dir
-train_ratio: 0.8
-alpha: 0.5
-seed: 42
-min_samples_per_client: 10
-max_split_attempts: 1000

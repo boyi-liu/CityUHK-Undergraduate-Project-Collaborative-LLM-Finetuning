@@ -1,0 +1,32 @@
+seed: 42
+data:
+  raw_path: dataset/alpaca_raw/alpaca_data.json
+  task_groups_path: dataset/alpaca_task_groups.jsonl
+  task_groups_manifest_path: dataset/alpaca_task_groups.manifest.json
+  output_dir: dataset/alpaca_client_splits_full
+  max_examples: null
+  dirichlet_alpha: 0.5
+  min_samples_per_client: 20
+model:
+  name: Qwen/Qwen2.5-0.5B
+  max_length: 512
+  lora_rank: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: [q_proj, v_proj]
+training:
+  local_steps: 20
+  micro_batch_size: 1
+  grad_accum: 8
+  learning_rate: 0.0002
+federation:
+  mode: sync
+  client_count: 10
+  clients_per_round: 5
+  rounds: 10
+  total_updates: 50
+  max_active: 5
+  async_mix: 0.5
+  duration_min: 1.0
+  duration_max: 3.0
+output_dir: exp/federated-lora-full

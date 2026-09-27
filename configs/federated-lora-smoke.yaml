@@ -1,11 +1,10 @@
 seed: 42
 data:
   raw_path: dataset/alpaca_raw/alpaca_data.json
-  output_dir: dataset/point2_alpaca_smoke
+  task_groups_path: dataset/alpaca_task_groups.jsonl
+  task_groups_manifest_path: dataset/alpaca_task_groups.manifest.json
+  output_dir: dataset/alpaca_client_splits_smoke
   max_examples: 120
-  train_ratio: 0.8
-  val_ratio: 0.1
-  test_ratio: 0.1
   dirichlet_alpha: 0.5
   min_samples_per_client: 8
 model:
@@ -20,7 +19,6 @@ training:
   micro_batch_size: 1
   grad_accum: 1
   learning_rate: 0.0002
-  eval_limit: 8
 federation:
   mode: sync
   client_count: 3
@@ -31,5 +29,4 @@ federation:
   async_mix: 0.5
   duration_min: 1.0
   duration_max: 3.0
-  eval_every: 1
-output_dir: exp/point2-smoke
+output_dir: exp/federated-lora-smoke

@@ -1,4 +1,4 @@
-"""Prepare disjoint Alpaca splits with auditable non-IID client partitions."""
+"""Assign every selected Alpaca row to a non-IID training client."""
 
 from __future__ import annotations
 
@@ -12,23 +12,33 @@ import numpy as np
 
 
 ALPACA_URL = "https://raw.githubusercontent.com/tatsu-lab/stanford_alpaca/main/alpaca_data.json"
+PREPARED_FORMAT_VERSION = 3
 
 
-def category(instruction: str) -> str:
-    text = instruction.strip().lower()
-    groups = {
-        "writing": ("write", "create", "generate", "compose", "draft"),
-        "transform": ("translate", "convert", "transform", "rewrite"),
-        "list": ("list", "give", "provide", "name", "identify"),
-        "explain": ("explain", "describe", "what is", "what are", "define"),
-        "question": ("how", "why", "when", "where", "who"),
-        "classify": ("classify", "categorize", "determine", "evaluate", "judge"),
-        "summarize": ("summarize", "summarise", "condense", "shorten"),
-    }
-    for label, prefixes in groups.items():
-        if text.startswith(prefixes):
-            return label
-    return "other"
+def load_task_groups(label_path: Path, manifest_path: Path, raw_bytes: bytes,
+                     raw_count: int) -> tuple[dict[int, str], str]:
+    """Reject labels generated for another Alpaca file or with missing rows."""
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest["source_sha256"] != hashlib.sha256(raw_bytes).hexdigest():
+        raise ValueError("Task-group labels were generated for a different Alpaca file")
+    if manifest["source_rows"] != raw_count:
+        raise ValueError("Task-group manifest row count differs from the Alpaca file")
+    label_bytes = label_path.read_bytes()
+    labels: dict[int, str] = {}
+    allowed = set(manifest["labels"])
+    for line in label_bytes.splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        index, group = row["source_index"], row["task_group"]
+        if type(index) is not int or not 0 <= index < raw_count or index in labels:
+            raise ValueError(f"Duplicate or invalid task-group source_index: {index}")
+        if group not in allowed:
+            raise ValueError(f"Invalid task group for row {index}: {group}")
+        labels[index] = group
+    if len(labels) != raw_count or dict(Counter(labels.values())) != manifest["counts"]:
+        raise ValueError("Task-group labels are incomplete or differ from their manifest")
+    return labels, hashlib.sha256(label_bytes).hexdigest()
 
 
 def partition_dirichlet(records: list[dict], client_count: int, alpha: float,
@@ -38,7 +48,7 @@ def partition_dirichlet(records: list[dict], client_count: int, alpha: float,
     if len(records) < client_count * min_samples:
         raise ValueError("Too few training examples for the requested clients and minimum size")
     rng = np.random.default_rng(seed)
-    labels = np.array([r["category"] for r in records])
+    labels = np.array([r["task_group"] for r in records])
     for _ in range(attempts):
         buckets: list[list[int]] = [[] for _ in range(client_count)]
         for label in sorted(set(labels)):
@@ -56,17 +66,15 @@ def partition_dirichlet(records: list[dict], client_count: int, alpha: float,
     raise ValueError(f"Could not meet min_samples after {attempts} Dirichlet attempts")
 
 
-def split_records(raw: list[dict], *, client_count: int, max_examples: int,
-                  train_ratio: float, val_ratio: float, test_ratio: float,
-                  alpha: float, min_samples: int, seed: int) -> tuple[list[list[dict]], list[dict], list[dict]]:
-    if any(x <= 0 for x in (train_ratio, val_ratio, test_ratio)) or not np.isclose(
-        train_ratio + val_ratio + test_ratio, 1.0
-    ):
-        raise ValueError("train, validation and test ratios must be positive and sum to 1")
-    if max_examples < 1:
-        raise ValueError("max_examples must be positive")
+def split_records(raw: list[dict], *, task_groups: dict[int, str], client_count: int,
+                  max_examples: int | None, alpha: float, min_samples: int,
+                  seed: int) -> list[list[dict]]:
+    if max_examples is not None and max_examples < 1:
+        raise ValueError("max_examples must be positive or null for all rows")
     rng = np.random.default_rng(seed)
-    selected = rng.permutation(len(raw))[:min(max_examples, len(raw))]
+    selected = rng.permutation(len(raw))
+    if max_examples is not None:
+        selected = selected[:max_examples]
     records = []
     for index in selected:
         row = raw[int(index)]
@@ -77,20 +85,13 @@ def split_records(raw: list[dict], *, client_count: int, max_examples: int,
             "instruction": row["instruction"],
             "input": row["input"],
             "output": row["output"],
-            "category": category(row["instruction"]),
+            "task_group": task_groups[int(index)],
         })
-    n_train = int(len(records) * train_ratio)
-    n_val = int(len(records) * val_ratio)
-    train = records[:n_train]
-    val = records[n_train:n_train + n_val]
-    test = records[n_train + n_val:]
-    if not val or not test:
-        raise ValueError("Validation and test splits must each contain examples")
-    clients = partition_dirichlet(train, client_count, alpha, min_samples, seed + 1)
-    ids = [r["source_index"] for group in [*clients, val, test] for r in group]
-    if len(ids) != len(set(ids)):
-        raise AssertionError("Training, validation and test data overlap")
-    return clients, val, test
+    clients = partition_dirichlet(records, client_count, alpha, min_samples, seed + 1)
+    ids = [r["source_index"] for group in clients for r in group]
+    if len(ids) != len(records) or len(ids) != len(set(ids)):
+        raise AssertionError("Client training partitions lost or duplicated rows")
+    return clients
 
 
 def _write_jsonl(path: Path, rows: list[dict]) -> None:
@@ -110,9 +111,6 @@ def split_config(config: dict) -> dict:
     return {
         "client_count": config["federation"]["client_count"],
         "max_examples": data["max_examples"],
-        "train_ratio": data["train_ratio"],
-        "val_ratio": data["val_ratio"],
-        "test_ratio": data["test_ratio"],
         "alpha": data["dirichlet_alpha"],
         "min_samples": data["min_samples_per_client"],
         "seed": config["seed"],
@@ -128,32 +126,44 @@ def prepare(config: dict, root: Path) -> dict:
             raw_path.write_bytes(response.read())
     raw_bytes = raw_path.read_bytes()
     raw = json.loads(raw_bytes)
-    clients, val, test = split_records(raw, **split_config(config))
+    data = config["data"]
+    labels, label_sha256 = load_task_groups(
+        root / data["task_groups_path"], root / data["task_groups_manifest_path"],
+        raw_bytes, len(raw),
+    )
+    clients = split_records(raw, task_groups=labels, **split_config(config))
     for client_id, rows in enumerate(clients):
         _write_jsonl(data_dir / "clients" / f"{client_id}.jsonl", rows)
-    _write_jsonl(data_dir / "val.jsonl", val)
-    _write_jsonl(data_dir / "test.jsonl", test)
     manifest = {
+        "format_version": PREPARED_FORMAT_VERSION,
         "source": ALPACA_URL,
         "source_sha256": hashlib.sha256(raw_bytes).hexdigest(),
+        "task_groups_sha256": label_sha256,
         "split_config": split_config(config),
+        "training_count": sum(map(len, clients)),
         "client_counts": [len(rows) for rows in clients],
-        "client_categories": [dict(Counter(r["category"] for r in rows)) for rows in clients],
-        "validation_count": len(val),
-        "test_count": len(test),
+        "client_task_groups": [dict(Counter(r["task_group"] for r in rows)) for rows in clients],
     }
     (data_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return manifest
 
 
-def load_prepared(config: dict, root: Path) -> tuple[list[list[dict]], list[dict], list[dict], dict]:
+def load_prepared(config: dict, root: Path) -> tuple[list[list[dict]], dict]:
     data_dir = root / config["data"]["output_dir"]
     manifest_path = data_dir / "manifest.json"
     if not manifest_path.exists():
-        raise FileNotFoundError(f"Prepared data missing: run `python -m point2 prepare --config ...` first ({data_dir})")
+        raise FileNotFoundError(f"Prepared data missing: run `python -m federated_lora prepare --config ...` first ({data_dir})")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("format_version") != PREPARED_FORMAT_VERSION:
+        raise ValueError("Prepared data format changed; prepare the data again")
     if manifest["split_config"] != split_config(config):
         raise ValueError("Prepared data configuration differs from this experiment; prepare the data again")
+    label_path = root / config["data"]["task_groups_path"]
+    if manifest.get("task_groups_sha256") != hashlib.sha256(label_path.read_bytes()).hexdigest():
+        raise ValueError("Task-group labels changed since preparation; prepare the data again")
     clients = [read_jsonl(data_dir / "clients" / f"{i}.jsonl")
                for i in range(config["federation"]["client_count"])]
-    return clients, read_jsonl(data_dir / "val.jsonl"), read_jsonl(data_dir / "test.jsonl"), manifest
+    ids = [row["source_index"] for client in clients for row in client]
+    if len(ids) != manifest["training_count"] or len(ids) != len(set(ids)):
+        raise ValueError("Prepared client files have missing or duplicate training rows")
+    return clients, manifest

@@ -1,4 +1,4 @@
-"""Load and validate point 2 experiment configurations."""
+"""Load and validate federated LoRA experiment configurations."""
 
 from pathlib import Path
 
@@ -18,12 +18,12 @@ def load_config(path: Path, mode_override: str | None = None) -> dict:
         raise ValueError("Invalid client count or clients_per_round")
     if not 1 <= fed["max_active"] <= fed["client_count"]:
         raise ValueError("Invalid max_active")
-    if fed["rounds"] < 1 or fed["total_updates"] < 1 or fed["eval_every"] < 1:
-        raise ValueError("Rounds, total_updates and eval_every must be positive")
+    if fed["rounds"] < 1 or fed["total_updates"] < 1:
+        raise ValueError("Rounds and total_updates must be positive")
     if not 0 < fed["async_mix"] <= 1 or fed["duration_min"] <= 0 or fed["duration_max"] < fed["duration_min"]:
         raise ValueError("Invalid async mix or synthetic duration range")
-    if any(train[k] < 1 for k in ("local_steps", "micro_batch_size", "grad_accum", "eval_limit")):
-        raise ValueError("Training steps, batch size, accumulation and eval_limit must be positive")
+    if any(train[k] < 1 for k in ("local_steps", "micro_batch_size", "grad_accum")):
+        raise ValueError("Training steps, batch size and accumulation must be positive")
     if train["learning_rate"] <= 0 or model["lora_rank"] < 1 or model["max_length"] < 16:
         raise ValueError("Invalid learning rate, LoRA rank or maximum sequence length")
     return config
