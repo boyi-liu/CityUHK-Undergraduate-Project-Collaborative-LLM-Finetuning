@@ -1,0 +1,35 @@
+seed: 42
+data:
+  raw_path: dataset/alpaca_raw/alpaca_data.json
+  output_dir: dataset/point2_alpaca_smoke
+  max_examples: 120
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  dirichlet_alpha: 0.5
+  min_samples_per_client: 8
+model:
+  name: Qwen/Qwen2.5-0.5B
+  max_length: 256
+  lora_rank: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: [q_proj, v_proj]
+training:
+  local_steps: 2
+  micro_batch_size: 1
+  grad_accum: 1
+  learning_rate: 0.0002
+  eval_limit: 8
+federation:
+  mode: sync
+  client_count: 3
+  clients_per_round: 3
+  rounds: 2
+  total_updates: 6
+  max_active: 3
+  async_mix: 0.5
+  duration_min: 1.0
+  duration_max: 3.0
+  eval_every: 1
+output_dir: exp/point2-smoke

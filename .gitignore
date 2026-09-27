@@ -7,5 +7,6 @@ exp/
 dataset/*_raw/
 dataset/*/train/
 dataset/*/test/
+dataset/point2_alpaca_*/
 *.pt
 *.safetensors

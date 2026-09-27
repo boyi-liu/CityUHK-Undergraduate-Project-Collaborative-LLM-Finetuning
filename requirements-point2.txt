@@ -1,0 +1,6 @@
+# Install CUDA PyTorch 2.5.1 separately with the cu121 index (see README).
+transformers==4.47.1
+peft==0.14.0
+accelerate==1.2.1
+numpy>=1.24,<3
+PyYAML>=6,<7
