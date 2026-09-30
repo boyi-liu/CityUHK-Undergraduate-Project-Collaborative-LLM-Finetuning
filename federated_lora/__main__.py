@@ -9,7 +9,7 @@ from .config import load_config
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Federated LoRA pipeline")
-    parser.add_argument("action", choices=("prepare", "run"))
+    parser.add_argument("action", choices=("prepare", "schedule", "dry-run", "run"))
     parser.add_argument("--config", default="configs/federated-lora-smoke.yaml")
     parser.add_argument("--mode", choices=("sync", "async"), help="Override federation.mode")
     parser.add_argument("--gpu", type=int, help="Physical GPU index for this process")
@@ -21,6 +21,18 @@ def main() -> None:
         from .data import prepare
         import json
         print(json.dumps(prepare(config, root), indent=2))
+    elif args.action in ("schedule", "dry-run"):
+        if not config.get("sessions", {}).get("enabled"):
+            parser.error("schedule and dry-run need a configuration with sessions.enabled: true")
+        if args.action == "dry-run":
+            from .session_runner import dry_run
+            dry_run(config, root)
+        else:
+            from .sessions import prepare_sessions, write_schedule
+            manifest = prepare_sessions(config, root)
+            directory = root / config["output_dir"] / "schedule"
+            write_schedule(manifest, directory)
+            print(f"Prepared {len(manifest['sessions'])} sessions for {len(manifest['clients'])} clients in {directory}")
     else:
         if args.gpu is not None:
             os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)

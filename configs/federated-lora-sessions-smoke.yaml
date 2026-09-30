@@ -1,0 +1,50 @@
+seed: 42
+data:
+  raw_path: dataset/alpaca_raw/alpaca_data.json
+  task_groups_path: dataset/alpaca_task_groups.jsonl
+  task_groups_manifest_path: dataset/alpaca_task_groups.manifest.json
+  output_dir: dataset/alpaca_client_splits_sessions_smoke
+  max_examples: 120
+  dirichlet_alpha: 0.5
+  min_samples_per_client: 4
+model:
+  name: Qwen/Qwen2.5-0.5B
+  max_length: 256
+  lora_rank: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: [q_proj, v_proj]
+training:
+  local_steps: 2
+  micro_batch_size: 1
+  grad_accum: 1
+  learning_rate: 0.0002
+federation:
+  mode: sync
+  client_count: 10
+  clients_per_round: 5
+  max_active: 5
+  async_mix: 0.5
+sessions:
+  enabled: true
+  trace_path: dataset/device_usage_traces.json
+  trace_ids: [0, 1, 3, 4, 7, 8, 9, 11, 13, 14]
+  time_basis: recorded_local
+  start_date: "2020-01-30"
+  start_time: "22:00"
+  end_time: "07:00"
+  count: 3
+  min_window_seconds: 60
+timing:
+  agx_client_ids: [0, 7]
+  speed_scale: 1.0
+  upload_mbps: 1.0
+  dry_run_adapter_bytes: 2162688
+evaluation:
+  revision: c30699e8356da336a370243923dbaf21066bb9fe
+  cache_dir: dataset/mmlu_raw
+  n_shot: 5
+  max_length: 4096
+  max_samples: 12
+  subset_seed: 42
+output_dir: exp/federated-lora-sessions-smoke

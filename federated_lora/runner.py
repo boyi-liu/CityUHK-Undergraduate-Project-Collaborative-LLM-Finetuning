@@ -58,6 +58,9 @@ def _configuration_id(config: dict, manifest: dict) -> str:
 
 
 def run(config: dict, root: Path, resume: bool = False) -> dict:
+    if config.get("sessions", {}).get("enabled"):
+        from .session_runner import run_sessions
+        return run_sessions(config, root, resume=resume)
     clients, manifest = load_prepared(config, root)
     config_id = _configuration_id(config, manifest)
     run_dir = root / config["output_dir"] / config["federation"]["mode"]
