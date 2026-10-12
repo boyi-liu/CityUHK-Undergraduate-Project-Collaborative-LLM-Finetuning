@@ -1,0 +1,3 @@
+# Keep annotation fingerprints stable across Windows and Linux checkouts.
+/dataset/alpaca_task_groups.jsonl text eol=lf
+/dataset/alpaca_task_group_overrides.jsonl text eol=lf

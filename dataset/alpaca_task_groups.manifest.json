@@ -13,20 +13,44 @@
     "suggest_design",
     "classify",
     "summarize",
-    "calculate",
-    "other_unclear"
+    "calculate"
   ],
   "counts": {
-    "create_content": 14801,
-    "transform_content": 6862,
-    "explain_describe": 9262,
-    "find_fact": 6642,
-    "suggest_design": 5790,
-    "classify": 4326,
-    "summarize": 1794,
-    "calculate": 2277,
-    "other_unclear": 248
+    "create_content": 14813,
+    "transform_content": 6883,
+    "explain_describe": 9316,
+    "find_fact": 6660,
+    "suggest_design": 5891,
+    "classify": 4334,
+    "summarize": 1795,
+    "calculate": 2310
   },
-  "classification_input": "instruction only",
-  "generated_at_utc": "2026-09-27T15:42:02.336249+00:00"
+  "classification_input": "instruction only for original pass; instruction and input for 248 reviewed rows",
+  "generated_at_utc": "2026-09-27T15:42:02.336249+00:00",
+  "reviews": [
+    {
+      "reviewed_at_utc": "2026-10-12T09:30:32.444666+00:00",
+      "reviewer": "Codex assistant in the project conversation",
+      "method": "Individually read all 248 instructions and input fields; assign one of eight existing groups",
+      "reference_answers_used": false,
+      "previous_group": "other_unclear",
+      "reviewed_rows": 248,
+      "ambiguous_instructions": 38,
+      "closest_fit_rule": "Action execution, scheduling and model-training requests map to procedural assistance in suggest_design; underspecified requests use their closest task family",
+      "prediction_rule": "Numerical price or value estimates map to calculate; qualitative forecasts map to explain_describe",
+      "previous_labels_sha256": "67c4400628e4c7cb03c365db2a5b7643c7ab314fc3ff0f0d2bd8304609fd03b9",
+      "overrides_file": "dataset/alpaca_task_group_overrides.jsonl",
+      "overrides_sha256": "c5db2a4c0fb1c071e5d615cea2d47bf57243db956ab94000fa949c5dc857e76f",
+      "reassigned_counts": {
+        "suggest_design": 101,
+        "explain_describe": 54,
+        "calculate": 33,
+        "classify": 8,
+        "transform_content": 21,
+        "create_content": 12,
+        "find_fact": 18,
+        "summarize": 1
+      }
+    }
+  ]
 }

@@ -1,0 +1,248 @@
+{"source_index": 236, "task_group": "suggest_design", "group_reason": "Plan delegation of the supplied design task.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 339, "task_group": "suggest_design", "group_reason": "Specify a method for training a regression model.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 567, "task_group": "explain_describe", "group_reason": "Explain differences between two financial schemes.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 594, "task_group": "calculate", "group_reason": "Estimate a numerical price for an item.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 890, "task_group": "suggest_design", "group_reason": "Provide a procedure for disconnecting a cable.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 1405, "task_group": "classify", "group_reason": "Judge the truth of the supplied statement.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 2068, "task_group": "classify", "group_reason": "Give a yes-or-no judgment about viruses.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 3310, "task_group": "suggest_design", "group_reason": "Plan a meeting with the named client.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 3519, "task_group": "transform_content", "group_reason": "Extract characters occurring once in the supplied string.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 3538, "task_group": "transform_content", "group_reason": "Select an element from the supplied list.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 4152, "task_group": "calculate", "group_reason": "Estimate a future numerical stock price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 4258, "task_group": "create_content", "group_reason": "Write Python code for a multiplication table.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 4664, "task_group": "suggest_design", "group_reason": "Provide a procedure for printing a physical object.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 4936, "task_group": "explain_describe", "group_reason": "Infer another person's possible thoughts.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 5605, "task_group": "explain_describe", "group_reason": "Interpret the meaning of the supplied quotation.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 5786, "task_group": "explain_describe", "group_reason": "Analyze possible future stock performance.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 6322, "task_group": "suggest_design", "group_reason": "Plan purchases needed for a camping trip.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 6872, "task_group": "explain_describe", "group_reason": "Analyze a possible future stock trend.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 7010, "task_group": "explain_describe", "group_reason": "Explain technology's effects on learning.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 7049, "task_group": "suggest_design", "group_reason": "Propose a negotiation approach for the laptop purchase.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 7066, "task_group": "transform_content", "group_reason": "Extract the longest palindromic substring from supplied text.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 7069, "task_group": "calculate", "group_reason": "Solve the supplied shortest-path problem.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 7319, "task_group": "find_fact", "group_reason": "Retrieve a Pinterest item about rural life.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 7418, "task_group": "suggest_design", "group_reason": "Identify the next step in a machine-learning workflow.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 7450, "task_group": "create_content", "group_reason": "Generate questions about a software engineering job description.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 7453, "task_group": "suggest_design", "group_reason": "Provide a procedure for preparing tea.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 7717, "task_group": "suggest_design", "group_reason": "Provide a procedure for connecting to Wi-Fi.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 8366, "task_group": "explain_describe", "group_reason": "Explain ethical considerations in artificial intelligence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 8397, "task_group": "suggest_design", "group_reason": "Plan a timed reminder to buy eggs.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 8493, "task_group": "find_fact", "group_reason": "Identify an animal known for strong swimming ability.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 8801, "task_group": "create_content", "group_reason": "Supply an arbitrary value for an unconstrained variable.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 9123, "task_group": "find_fact", "group_reason": "Retrieve the factual answer about computer data storage.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 10385, "task_group": "suggest_design", "group_reason": "Specify a method for training an animal recognition model.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 10395, "task_group": "suggest_design", "group_reason": "Provide a procedure for sending the supplied message.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 10460, "task_group": "find_fact", "group_reason": "Name the three primary colors.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 10486, "task_group": "suggest_design", "group_reason": "Provide guidance for playing a song on a keyboard.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 11055, "task_group": "explain_describe", "group_reason": "Interpret and assess the supplied sentence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 11106, "task_group": "explain_describe", "group_reason": "Infer possible consequences of the described encounter.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 11160, "task_group": "suggest_design", "group_reason": "Supply preparation steps for the provided lasagna ingredients.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 11168, "task_group": "suggest_design", "group_reason": "Provide a strategy for assembling a jigsaw puzzle.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 11694, "task_group": "suggest_design", "group_reason": "Specify a procedure for training GPT-2.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 11804, "task_group": "calculate", "group_reason": "Estimate a future numerical gold price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 11998, "task_group": "explain_describe", "group_reason": "Critique the properties of a website.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 12284, "task_group": "calculate", "group_reason": "Solve the tank filling and emptying problem.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 12390, "task_group": "suggest_design", "group_reason": "Propose a procedure for tuning logistic regression.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 12460, "task_group": "calculate", "group_reason": "Estimate a numerical market closing value.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 12466, "task_group": "suggest_design", "group_reason": "Plan a flight booking with the stated constraints.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 12514, "task_group": "calculate", "group_reason": "Compute the result of the supplied addition program.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 12515, "task_group": "suggest_design", "group_reason": "Specify a temperature-control action from the supplied settings.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 12721, "task_group": "calculate", "group_reason": "Estimate a future numerical stock price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 12739, "task_group": "suggest_design", "group_reason": "Design a logo for a music streaming website.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 12794, "task_group": "transform_content", "group_reason": "Complete a supplied sentence with a suitable word.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 13024, "task_group": "explain_describe", "group_reason": "Explain a relationship among the supplied celestial objects.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 13584, "task_group": "create_content", "group_reason": "Generate suitable content for the Mother's Day occasion.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 13664, "task_group": "transform_content", "group_reason": "Select the longer of two supplied strings.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 14599, "task_group": "explain_describe", "group_reason": "Analyze possible future stock-market performance.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 14662, "task_group": "suggest_design", "group_reason": "Plan a timed reminder.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 15576, "task_group": "calculate", "group_reason": "Compute the sum printed by the supplied program.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 15582, "task_group": "transform_content", "group_reason": "Extract the longest common subsequence of two strings.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 15968, "task_group": "suggest_design", "group_reason": "Provide a procedure for freezing a yogurt sample.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 15989, "task_group": "calculate", "group_reason": "Estimate a future numerical Apple stock price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 16541, "task_group": "suggest_design", "group_reason": "Propose an approach to selecting a horse-race bet.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 16549, "task_group": "suggest_design", "group_reason": "Recommend an outfit meeting the supplied description.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 16591, "task_group": "calculate", "group_reason": "Estimate a numerical Microsoft stock closing price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 16934, "task_group": "transform_content", "group_reason": "Select two elements from a supplied country list.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 16945, "task_group": "explain_describe", "group_reason": "Infer a likely outcome of studying before an exam.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 17413, "task_group": "suggest_design", "group_reason": "Specify a training procedure for the supplied image dataset.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 17547, "task_group": "suggest_design", "group_reason": "Recommend a purchase within the supplied budget.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 17663, "task_group": "suggest_design", "group_reason": "Specify a procedure for updating a customer's account address.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 17676, "task_group": "explain_describe", "group_reason": "Infer a possible outcome of a future boxing match.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 17687, "task_group": "suggest_design", "group_reason": "Plan a team meeting for next week.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 17922, "task_group": "create_content", "group_reason": "Generate an arbitrary guess of an unspecified number.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 18219, "task_group": "explain_describe", "group_reason": "Explain the definition of machine learning.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 18385, "task_group": "explain_describe", "group_reason": "Explain factors influencing personality development.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 18633, "task_group": "classify", "group_reason": "Assign the coin toss to a heads-or-tails outcome.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 18808, "task_group": "suggest_design", "group_reason": "Provide a procedure for uploading a document.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 19180, "task_group": "create_content", "group_reason": "Generate a number guess within the supplied range.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 19487, "task_group": "calculate", "group_reason": "Estimate a future numerical Tesla stock price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 19850, "task_group": "suggest_design", "group_reason": "Provide a procedure for blocking a website.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 19855, "task_group": "classify", "group_reason": "Select products predicted to have the greatest sales growth.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 20035, "task_group": "suggest_design", "group_reason": "Plan a timed reminder to call parents.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 20046, "task_group": "calculate", "group_reason": "Estimate a numerical stock-market data point.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 21251, "task_group": "suggest_design", "group_reason": "Plan retention of the supplied appointment information.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 21337, "task_group": "find_fact", "group_reason": "Retrieve the number stated in the abacus description.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 21486, "task_group": "summarize", "group_reason": "Summarize the main idea of the supplied Paris passage.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 21539, "task_group": "transform_content", "group_reason": "Combine two supplied person-and-pet records.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 21589, "task_group": "find_fact", "group_reason": "Retrieve the requested returns-policy information.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 21836, "task_group": "explain_describe", "group_reason": "Explain the importance of vaccinations.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 21844, "task_group": "calculate", "group_reason": "Compute grouped sales totals requested by the SQL query.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 22030, "task_group": "suggest_design", "group_reason": "Provide a procedure for submitting the supplied form.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 22072, "task_group": "suggest_design", "group_reason": "Provide a procedure for installing a web browser.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 22217, "task_group": "suggest_design", "group_reason": "Provide a procedure for opening a website.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 22311, "task_group": "suggest_design", "group_reason": "Plan a flight booking on the stated route and date.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 23126, "task_group": "explain_describe", "group_reason": "Infer a possible outcome of a future election.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 23428, "task_group": "suggest_design", "group_reason": "Plan a reminder before the stated meeting time.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 23619, "task_group": "calculate", "group_reason": "Estimate the numerical average age of store customers.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 23887, "task_group": "explain_describe", "group_reason": "Analyze which occupation may have the greatest future demand.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 23889, "task_group": "classify", "group_reason": "Assign job satisfaction to an ordinal rating.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 24736, "task_group": "suggest_design", "group_reason": "Provide a procedure for opening Task Manager.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 24758, "task_group": "transform_content", "group_reason": "Select an item from the supplied sports list.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 24772, "task_group": "suggest_design", "group_reason": "Provide a procedure for opening a bank account.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 25209, "task_group": "create_content", "group_reason": "Generate a conversational reply to a greeting.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 25272, "task_group": "explain_describe", "group_reason": "Explain the dangers of electronic waste.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 25432, "task_group": "suggest_design", "group_reason": "Provide a procedure for mixing the supplied ingredients.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 25496, "task_group": "explain_describe", "group_reason": "Analyze possible future trends of the named stocks.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 25836, "task_group": "calculate", "group_reason": "Estimate numerical Amazon stock prices for next week.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 25993, "task_group": "find_fact", "group_reason": "Name the longest river in South America.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 26030, "task_group": "suggest_design", "group_reason": "Provide a procedure for mixing the specified ingredients.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 26337, "task_group": "calculate", "group_reason": "Compute a sequence of ten multiples of three.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 26402, "task_group": "explain_describe", "group_reason": "Infer possible outcomes of launching a mobile application.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 26432, "task_group": "calculate", "group_reason": "Estimate a future numerical stock price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 26976, "task_group": "suggest_design", "group_reason": "Provide a procedure for drawing an octagon.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 27154, "task_group": "transform_content", "group_reason": "Select three words from the supplied list.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 27188, "task_group": "calculate", "group_reason": "Extend the supplied numerical sequence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 27274, "task_group": "explain_describe", "group_reason": "Explain potential harm from spreading false information.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 27395, "task_group": "explain_describe", "group_reason": "Explain vocabulary in the supplied sentence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 27499, "task_group": "find_fact", "group_reason": "Retrieve information about the stated time.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 27530, "task_group": "suggest_design", "group_reason": "Plan a reminder to read before bed.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 28039, "task_group": "explain_describe", "group_reason": "Analyze a possible stock-market outcome tomorrow.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 28355, "task_group": "transform_content", "group_reason": "Select a color from the defined rainbow color set.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 28550, "task_group": "transform_content", "group_reason": "Process an existing speech into a textual output.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 28562, "task_group": "suggest_design", "group_reason": "Identify a preparation step for chocolate truffles.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 28737, "task_group": "explain_describe", "group_reason": "Analyze linguistic properties of the supplied sentence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 28820, "task_group": "find_fact", "group_reason": "Name the highest mountain peak.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 28945, "task_group": "explain_describe", "group_reason": "Infer a person's likely action from the supplied situation.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 29046, "task_group": "suggest_design", "group_reason": "Provide a procedure for serving the supplied coffee order.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 29084, "task_group": "calculate", "group_reason": "Analyze numerical properties of the supplied number set.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 29093, "task_group": "suggest_design", "group_reason": "Provide preparation steps for the supplied hamburger ingredients.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 29354, "task_group": "explain_describe", "group_reason": "Describe a contrast between two elements.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 29427, "task_group": "explain_describe", "group_reason": "Analyze possible future performance of Tesla stock.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 29525, "task_group": "suggest_design", "group_reason": "Propose how to handle an employee's work arrangement request.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 29576, "task_group": "explain_describe", "group_reason": "Analyze a possible future stock-market direction.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 29595, "task_group": "calculate", "group_reason": "Estimate a numerical Google stock price in five years.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 29716, "task_group": "calculate", "group_reason": "Compute the average of the five supplied grades.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 29916, "task_group": "suggest_design", "group_reason": "Specify a training procedure for a dialogue language model.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 29935, "task_group": "create_content", "group_reason": "Generate content for the underspecified assignment prompt.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 29941, "task_group": "create_content", "group_reason": "Generate a response to the supplied statement.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 30284, "task_group": "transform_content", "group_reason": "Complete the supplied letter sequence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 30451, "task_group": "create_content", "group_reason": "Generate moves in a conversational game.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 30671, "task_group": "suggest_design", "group_reason": "Provide a procedure for entering an employee record.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 30682, "task_group": "find_fact", "group_reason": "Identify the common emotion following bereavement.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 30799, "task_group": "suggest_design", "group_reason": "Propose a way to take an unusual photograph.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 31012, "task_group": "suggest_design", "group_reason": "Provide a procedure for assembling a monitor.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 32436, "task_group": "suggest_design", "group_reason": "Provide a dance practice procedure for the given rhythm.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 32494, "task_group": "classify", "group_reason": "Select suspects from the supplied candidate names.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 32524, "task_group": "transform_content", "group_reason": "Extract a chorus from a supplied song.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 32567, "task_group": "explain_describe", "group_reason": "Explain the meanings of vocabulary words.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 32597, "task_group": "find_fact", "group_reason": "Identify a shopping-mall entrance from location candidates.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 32887, "task_group": "suggest_design", "group_reason": "Plan a reminder for the stated time.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 33059, "task_group": "suggest_design", "group_reason": "Provide a procedure for moving files between folders.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 33185, "task_group": "transform_content", "group_reason": "Complete the supplied word analogy.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 33597, "task_group": "suggest_design", "group_reason": "Provide a singing practice procedure.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 33599, "task_group": "suggest_design", "group_reason": "Design a procedure for making a paper pinwheel.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 33647, "task_group": "suggest_design", "group_reason": "Provide a procedure for preparing pretzel bites.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 33760, "task_group": "suggest_design", "group_reason": "Plan a meeting between two teams.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 33857, "task_group": "calculate", "group_reason": "Solve the supplied Sudoku constraint problem.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 34011, "task_group": "calculate", "group_reason": "Estimate a numerical sum for a dice roll.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 34257, "task_group": "explain_describe", "group_reason": "Interpret the supplied statement about financial uncertainty.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 34581, "task_group": "suggest_design", "group_reason": "Provide a procedure for assembling a cabinet.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 34815, "task_group": "explain_describe", "group_reason": "Assess the merits of adventure holidays.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 35066, "task_group": "suggest_design", "group_reason": "Plan a recurring reminder to check email.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 36008, "task_group": "explain_describe", "group_reason": "Explain an application of Locke's natural-rights theory.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 36722, "task_group": "find_fact", "group_reason": "Name an example of an amphibian.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 36787, "task_group": "explain_describe", "group_reason": "Analyze the meaning or form of the supplied sentence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 36940, "task_group": "explain_describe", "group_reason": "Describe characteristics of a successful entrepreneur.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 37070, "task_group": "explain_describe", "group_reason": "Assess a historical claim about Roman technology.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 37278, "task_group": "calculate", "group_reason": "Extrapolate the supplied numerical sales series.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 37588, "task_group": "explain_describe", "group_reason": "Analyze the structure and behavior of an existing website.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 38032, "task_group": "suggest_design", "group_reason": "Provide a procedure for assembling a table.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 38085, "task_group": "suggest_design", "group_reason": "Provide a procedure for configuring the specified computer.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 38096, "task_group": "suggest_design", "group_reason": "Plan a business meeting about market research.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 38119, "task_group": "transform_content", "group_reason": "Select an element from the supplied fruit list.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 38147, "task_group": "find_fact", "group_reason": "Retrieve information about a past personal event.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 38292, "task_group": "calculate", "group_reason": "Estimate future numerical temperatures.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 38444, "task_group": "explain_describe", "group_reason": "Analyze a possible short-term Tesla stock-price change.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 38525, "task_group": "suggest_design", "group_reason": "Provide a procedure for assembling a toy robot.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 38658, "task_group": "suggest_design", "group_reason": "Plan a sales-team meeting at the stated time.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 38799, "task_group": "explain_describe", "group_reason": "Analyze likely outcomes for equally matched teams.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 38939, "task_group": "suggest_design", "group_reason": "Plan a phone inquiry about a job opening.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 39714, "task_group": "calculate", "group_reason": "Process the supplied numerical list to obtain results.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 39715, "task_group": "transform_content", "group_reason": "Reduce the supplied dataset to a smaller representation.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 39795, "task_group": "explain_describe", "group_reason": "Analyze possible stock-market behavior.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 40072, "task_group": "suggest_design", "group_reason": "Provide a procedure for assembling a LEGO model.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 40092, "task_group": "suggest_design", "group_reason": "Provide a plan for a short mindfulness practice.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 40275, "task_group": "transform_content", "group_reason": "Select a noun from the supplied list.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 40438, "task_group": "suggest_design", "group_reason": "Provide a procedure for assembling a chair.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 40561, "task_group": "suggest_design", "group_reason": "Plan robotic movement of the specified item.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 40900, "task_group": "calculate", "group_reason": "Combine the supplied numbers through a numerical operation.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 41156, "task_group": "classify", "group_reason": "Judge whether the supplied credentials are valid.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 41161, "task_group": "suggest_design", "group_reason": "Provide a procedure for compiling the supplied C++ program.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 41164, "task_group": "suggest_design", "group_reason": "Provide a procedure for creating a contact record.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 41338, "task_group": "calculate", "group_reason": "Estimate a numerical Intel stock closing price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 41468, "task_group": "create_content", "group_reason": "Generate a game interaction or playable content.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 41661, "task_group": "suggest_design", "group_reason": "Provide a procedure for creating a customer account.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 41822, "task_group": "suggest_design", "group_reason": "Provide a procedure for starting the specified song playback.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 41996, "task_group": "suggest_design", "group_reason": "Provide a procedure for accessing browser settings.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 42042, "task_group": "explain_describe", "group_reason": "Explain requirements implied by the supplied policy statement.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 42121, "task_group": "suggest_design", "group_reason": "Provide a procedure for creating a social-media profile.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 42233, "task_group": "explain_describe", "group_reason": "Infer a user's next action from the supplied scenario.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 42586, "task_group": "transform_content", "group_reason": "Select a sport from the supplied list.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 42741, "task_group": "suggest_design", "group_reason": "Provide a dance procedure for the named song.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 43221, "task_group": "find_fact", "group_reason": "Retrieve factual information about the Titanic.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 43287, "task_group": "suggest_design", "group_reason": "Design an assembly procedure using the supplied materials.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 43601, "task_group": "suggest_design", "group_reason": "Provide a strategy for assembling a jigsaw puzzle.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 43606, "task_group": "explain_describe", "group_reason": "Explain the alliteration in the supplied sentence.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 43613, "task_group": "suggest_design", "group_reason": "Plan a recurring reminder to take a multivitamin.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 44077, "task_group": "explain_describe", "group_reason": "Infer a customer's possible order from the supplied circumstances.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 44423, "task_group": "suggest_design", "group_reason": "Provide a procedure for drilling a wall.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 44504, "task_group": "suggest_design", "group_reason": "Design an experimental study about database-related human error.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 44603, "task_group": "transform_content", "group_reason": "Select an element from the supplied array.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 44640, "task_group": "suggest_design", "group_reason": "Provide a procedure for uploading a document to Dropbox.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 44644, "task_group": "explain_describe", "group_reason": "Infer an audience's possible reaction to a performance.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 44747, "task_group": "explain_describe", "group_reason": "Interpret possible outcomes of the described drug experiment.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 45017, "task_group": "suggest_design", "group_reason": "Provide a procedure for cutting out the supplied shape.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 45284, "task_group": "suggest_design", "group_reason": "Provide a procedure for preparing a sandwich.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 45349, "task_group": "suggest_design", "group_reason": "Provide guidance for the requested dog-breeding procedure.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 45383, "task_group": "explain_describe", "group_reason": "Infer a stock-price direction from the earnings report.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 45684, "task_group": "explain_describe", "group_reason": "Explain the definition of global warming.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 46004, "task_group": "suggest_design", "group_reason": "Provide a procedure for building a Rubik's Cube.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 46458, "task_group": "find_fact", "group_reason": "Retrieve current weather information for Chicago.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 46542, "task_group": "suggest_design", "group_reason": "Provide a procedure for preparing the specified sandwich.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 46708, "task_group": "calculate", "group_reason": "Estimate a numerical Apple stock closing price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 47007, "task_group": "explain_describe", "group_reason": "Describe the result of following the supplied food instructions.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 47049, "task_group": "suggest_design", "group_reason": "Propose a plan for learning a skill online.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 47713, "task_group": "calculate", "group_reason": "Find numerical assignments satisfying the supplied equation.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 47831, "task_group": "suggest_design", "group_reason": "Plan a reminder after the stated interval.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 48055, "task_group": "calculate", "group_reason": "Estimate a numerical Apple stock closing price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 48066, "task_group": "explain_describe", "group_reason": "Analyze linguistic properties of the supplied text.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 48618, "task_group": "suggest_design", "group_reason": "Plan a survey and its subsequent analysis.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 48699, "task_group": "suggest_design", "group_reason": "Provide baking steps for the supplied cookie ingredients.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 48873, "task_group": "find_fact", "group_reason": "Retrieve information about a person's first bicycle.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 48897, "task_group": "suggest_design", "group_reason": "Plan a meeting with the named customer.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 49324, "task_group": "suggest_design", "group_reason": "Provide a procedure for installing software.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 49412, "task_group": "create_content", "group_reason": "Build website content from the supplied news material.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 49456, "task_group": "explain_describe", "group_reason": "Assess the supplied statement through a requested team opinion.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 49677, "task_group": "suggest_design", "group_reason": "Plan a virtual meeting at the stated date and time.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 49739, "task_group": "explain_describe", "group_reason": "Interpret the situation described in the supplied text.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 49740, "task_group": "find_fact", "group_reason": "Name the capital of France.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 50412, "task_group": "suggest_design", "group_reason": "Provide a procedure for forwarding the supplied email.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 50459, "task_group": "explain_describe", "group_reason": "Explain the relationship between height and weight.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 50596, "task_group": "suggest_design", "group_reason": "Plan a recurring calendar reminder.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 50753, "task_group": "suggest_design", "group_reason": "Propose changes to traditional gender roles.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 50779, "task_group": "classify", "group_reason": "Evaluate the supplied Boolean condition as true or false.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 50800, "task_group": "calculate", "group_reason": "Estimate a future numerical Google stock price.", "assignment_basis": "requested_task", "ambiguous_instruction": false}
+{"source_index": 51322, "task_group": "transform_content", "group_reason": "Infer the string output of the supplied function call.", "assignment_basis": "closest_fit", "ambiguous_instruction": true}
+{"source_index": 51357, "task_group": "suggest_design", "group_reason": "Plan a reminder to call a parent.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 51516, "task_group": "suggest_design", "group_reason": "Design a virtual garden.", "assignment_basis": "closest_fit", "ambiguous_instruction": false}
+{"source_index": 51786, "task_group": "find_fact", "group_reason": "Name the capital of India.", "assignment_basis": "requested_task", "ambiguous_instruction": false}

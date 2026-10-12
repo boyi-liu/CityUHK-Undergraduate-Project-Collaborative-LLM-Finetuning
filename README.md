@@ -18,14 +18,24 @@ configuration and a client-partition manifest.
 ### Alpaca task groups
 
 `dataset/alpaca_task_groups.jsonl` contains one task-group label for each of the
-52,002 Stanford Alpaca rows, keyed by zero-based `source_index`. The nine groups
+52,002 Stanford Alpaca rows, keyed by zero-based `source_index`. The eight groups
 are `create_content`, `transform_content`, `explain_describe`, `find_fact`,
-`suggest_design`, `classify`, `summarize`, `calculate`, and `other_unclear`. Labels
-were assigned from the instruction text; they are model-generated annotations,
+`suggest_design`, `classify`, `summarize`, and `calculate`. The original labels
+were assigned from instruction text. All 248 rows formerly in `other_unclear`
+were individually reviewed using instruction and input, then assigned to these
+eight groups. All 52,002 rows remain available for training. These are model-generated annotations,
 not Stanford's own per-row categories. The companion
 `dataset/alpaca_task_groups.manifest.json` records the source SHA-256, label counts,
 and classification provenance. The grouping file contains IDs, labels, and brief
 reasons, not the Alpaca examples themselves.
+
+`dataset/alpaca_task_group_overrides.jsonl` preserves the 248 reviewed decisions,
+including reasons and flags for 38 underspecified instructions. Action execution,
+scheduling, and model-training requests use the closest procedural group,
+`suggest_design`. Numerical forecasts use `calculate`; qualitative forecasts use
+`explain_describe`. These labels describe the requested task, not whether the
+request is answerable or its reference answer is correct. The classification tool
+applies the reviewed decisions when rebuilding labels from cached batches.
 
 Preparation checks the exact raw Alpaca file hash and label coverage before it
 assigns every selected row to a training client with a Dirichlet draw. The
