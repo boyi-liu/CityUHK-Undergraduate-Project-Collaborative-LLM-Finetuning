@@ -1,0 +1,218 @@
+{
+  "format_version": 1,
+  "dataset": "cais/mmlu",
+  "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+  "source": "https://huggingface.co/datasets/cais/mmlu/tree/c30699e8356da336a370243923dbaf21066bb9fe",
+  "license": "MIT",
+  "license_file": "dataset/MMLU-LICENSE.txt",
+  "training_splits": [
+    "dev",
+    "validation"
+  ],
+  "source_counts": {
+    "dev": 285,
+    "validation": 1531
+  },
+  "training_count": 1780,
+  "removed": [
+    {
+      "source_split": "dev",
+      "source_index": 20,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "dev",
+      "source_index": 24,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "dev",
+      "source_index": 45,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "dev",
+      "source_index": 46,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "dev",
+      "source_index": 49,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "dev",
+      "source_index": 53,
+      "reason": "pool_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 52,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 60,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 69,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 77,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 79,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 129,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 130,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 131,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 133,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 134,
+      "reason": "pool_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 137,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 142,
+      "reason": "pool_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 143,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 145,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 146,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 147,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 149,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 150,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 151,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 152,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 153,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 154,
+      "reason": "pool_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 156,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 530,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 814,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 1385,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 1397,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 1414,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 1428,
+      "reason": "test_duplicate"
+    },
+    {
+      "source_split": "validation",
+      "source_index": 1429,
+      "reason": "test_duplicate"
+    }
+  ],
+  "training_file_sha256": "ab26a576ce31080792f638b7954585fe140e437b45e804cc640fabc5779c5e19",
+  "subject_groups_sha256": "58f4f1b33a6c2908f3b6eba218a4d46f6e16f023cd6822d87fab656907249852",
+  "test_count": 14042,
+  "test_content_sha256": "c0a7da7ab60ccb528a78d808991311a6c8ebafeca006b4b60bd2cc2ded151052",
+  "source_content_sha256": {
+    "dev": "cb529a14f14af275405b106054f3e68ba3328f9640923ec9fba53f47ba8f101f",
+    "validation": "2d7be8cb9badf74596174a91a9e5deec750ee1c6cef54c3d2c7ae7ddf07a1764"
+  },
+  "group_counts": {
+    "Mathematics": 140,
+    "Medicine and health": 217,
+    "Natural sciences": 180,
+    "Business and economics": 194,
+    "Computing and engineering": 83,
+    "History, law and philosophy": 583,
+    "General knowledge": 105,
+    "Social sciences": 278
+  },
+  "note": "Project-defined major groups. Exact question/choice duplicates and test overlaps are excluded."
+}

@@ -1,4 +1,4 @@
-"""CLI for preparing Alpaca clients and running federated LoRA experiments."""
+"""CLI for preparing grouped MMLU clients and running federated LoRA."""
 
 import argparse
 import os
@@ -10,13 +10,26 @@ from .config import load_config
 def main() -> None:
     parser = argparse.ArgumentParser(description="Federated LoRA pipeline")
     parser.add_argument("action", choices=("prepare", "schedule", "dry-run", "run"))
-    parser.add_argument("--config", default="configs/federated-lora-smoke.yaml")
+    parser.add_argument("--config", default="configs/federated-lora-full.yaml")
     parser.add_argument("--mode", choices=("sync", "async"), help="Override federation.mode")
     parser.add_argument("--gpu", type=int, help="Physical GPU index for this process")
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     config = load_config(root / args.config, args.mode)
+    if config.get("data", {}).get("dataset") == "mmlu":
+        if args.action not in ("prepare", "run"):
+            parser.error("MMLU accuracy stopping supports prepare and run")
+        if args.gpu is not None:
+            os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
+        if args.action == "prepare":
+            from .mmlu_data import prepare
+            import json
+            print(json.dumps(prepare(config, root), indent=2))
+        else:
+            from .mmlu_runner import run
+            print(run(config, root, resume=args.resume))
+        return
     if args.action == "prepare":
         from .data import prepare
         import json

@@ -1,0 +1,154 @@
+{
+  "dataset": "cais/mmlu",
+  "training_splits": [
+    "dev",
+    "validation"
+  ],
+  "source_training_rows": 1816,
+  "clean_training_rows": 1780,
+  "rows_with_answer_targets": 1383,
+  "major_groups": 8,
+  "client_counts": [
+    488,
+    304,
+    247,
+    232,
+    509
+  ],
+  "configuration": {
+    "seed": 42,
+    "data": {
+      "dataset": "mmlu",
+      "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+      "training_path": "dataset/mmlu_train.jsonl",
+      "manifest_path": "dataset/mmlu_train.manifest.json",
+      "subject_groups_path": "dataset/mmlu_subject_groups.json",
+      "output_dir": "dataset/mmlu_client_splits_full",
+      "max_examples": null,
+      "dirichlet_alpha": 0.5
+    },
+    "model": {
+      "name": "Qwen/Qwen2.5-0.5B",
+      "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+      "max_length": 128,
+      "lora_rank": 8,
+      "lora_alpha": 32,
+      "lora_dropout": 0.1,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ]
+    },
+    "training": {
+      "local_epochs": 1,
+      "micro_batch_size": 8,
+      "grad_accum": 1,
+      "learning_rate": 0.0002,
+      "optimizer": "Adam",
+      "weight_decay": 0
+    },
+    "federation": {
+      "mode": "sync",
+      "client_count": 5,
+      "clients_per_round": 5,
+      "rounds": 10
+    },
+    "evaluation": {
+      "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+      "cache_dir": "dataset/mmlu_raw",
+      "n_shot": 0,
+      "max_length": 4096,
+      "max_samples": null,
+      "subset_seed": 42
+    },
+    "stopping": {
+      "rule": "first_accuracy_drop",
+      "split": "test",
+      "include_initial": true
+    },
+    "output_dir": "exp/federated-lora-mmlu"
+  },
+  "stopping_rule": "Stop after the first strict accuracy drop; keep the earliest highest score, including round zero.",
+  "selection_split": "test",
+  "independent_final_test": false,
+  "stopped_round": 4,
+  "selected_round": 3,
+  "selected_correct": 6867,
+  "selection_questions": 14042,
+  "selected_accuracy": 0.48903290129611166,
+  "round_results": [
+    {
+      "round": 0,
+      "correct": 6568,
+      "count": 14042,
+      "accuracy": 0.4677396382281726
+    },
+    {
+      "round": 1,
+      "correct": 6634,
+      "count": 14042,
+      "accuracy": 0.4724398233869819
+    },
+    {
+      "round": 2,
+      "correct": 6768,
+      "count": 14042,
+      "accuracy": 0.4819826235578977
+    },
+    {
+      "round": 3,
+      "correct": 6867,
+      "count": 14042,
+      "accuracy": 0.48903290129611166
+    },
+    {
+      "round": 4,
+      "correct": 6848,
+      "count": 14042,
+      "accuracy": 0.4876798176897878
+    }
+  ],
+  "validation": {
+    "isolated_commit_unit_tests_passed": 37,
+    "workspace_unit_tests_passed": 63,
+    "gpu_full_data_check": {
+      "passed": true,
+      "clean_training_questions": 1780,
+      "answer_target_rows": 1383,
+      "same_first_five_adapters_as_fixed_round_reference": true,
+      "same_all_predictions_and_scores_as_reference": true,
+      "stopped_at_first_drop": true,
+      "no_round_five_launched": true,
+      "stopped_round": 4,
+      "selected_round": 3,
+      "selected_correct": 6867,
+      "count": 14042,
+      "selected_accuracy": 0.48903290129611166,
+      "full_best_reload_prediction_changes": 0,
+      "frozen_base_verified": true,
+      "test_split_used_for_selection": true,
+      "independent_final_test": false,
+      "best_adapter_sha256": "f43d4ab2ada11649215083b7885412f0e9c8d98d458542b9369a132da2eed823",
+      "source_sha256": {
+        "federated_lora/mmlu_runtime.py": "fda16b1f41936ffef549788523124bda329af55985a54e165bd6550454d3aaa0",
+        "federated_lora/traces.py": "74156632c14c7116567dde4892fd5632fbc065c889cf6ab09a4c6a6cc3672c79",
+        "federated_lora/data.py": "73150a952362622876f481718c6b5e184228a8c40830ad4b97f85e447e914de0",
+        "federated_lora/mmlu_config.py": "991b5b1013245290d828df8387e2fdace145f76fb00a8be59988fb9e6c334e60",
+        "federated_lora/mmlu_runner.py": "d35314351ee58e8cad92e89aaeda162b73b8760b4de3338d4d7b2deaa5358be2",
+        "federated_lora/sessions.py": "f04a148623fb98676cd9aa5342e57304699b0fdf499a070750b759ca2aed5e3c",
+        "federated_lora/__main__.py": "7e0fb1d0089093c176ada5516549c0e8910502d1b52ad7a989fbd2b0df15e63d",
+        "federated_lora/round_selection.py": "720dec6e4f0d076d036c344c6e0bd189a22d3a6f846f9b9332a98641b579d4d5",
+        "federated_lora/runner.py": "7ee51e618e71adf4402d8ea1c43c6c75784bc08e69ef103a7eace3e17d6a467f",
+        "federated_lora/session_runner.py": "d5d7a4b11fed868df827ee125eb4f9028ce023cbe062e979ccdfed5473df653a",
+        "federated_lora/config.py": "c8cb67e710c40d8d89f474780cf39952b730e0fe182733fa266090c0a0973168",
+        "federated_lora/mmlu_data.py": "5169b0b113fc02f792f468fdf753b78366e3374c52c8c2d4f0241ea5e1f79a81",
+        "federated_lora/scheduler.py": "0f01668dc47155dce6f15b0ae82942c280b3c60e7aaeeba55664b4de568d8b67",
+        "federated_lora/__init__.py": "2b43e170b023ac9569ca616fb44425b081c0917c85a77f98534aac0190935cb4",
+        "federated_lora/evaluation.py": "587b9e9276612f04c5158ccff092c20723bd235494d58f5bc8c1a4d3f6b1dc27",
+        "federated_lora/timing.py": "257b33902b13fda0c8074652f71f541015395ae7085575a50e1632ccd9ad465d",
+        "federated_lora/training.py": "9dec543dc2f256bd6c7e321bf613c5e60cb21dcf0dab98d9af63ea702ce8607e"
+      }
+    },
+    "artifact_sha256": "b183780349b3e529f0a05934b41b79fe3e18f68984123c547005161e1444fdf1"
+  }
+}

@@ -13,6 +13,9 @@ def load_config(path: Path, mode_override: str | None = None) -> dict:
         raise ValueError("Configuration must be a YAML mapping")
     if mode_override:
         config["federation"]["mode"] = mode_override
+    if config.get("data", {}).get("dataset") == "mmlu":
+        from .mmlu_config import validate
+        return validate(config)
     fed, train, model = config["federation"], config["training"], config["model"]
     if fed["mode"] not in ("sync", "async"):
         raise ValueError("federation.mode must be sync or async")

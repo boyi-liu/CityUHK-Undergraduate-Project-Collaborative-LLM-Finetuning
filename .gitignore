@@ -7,6 +7,7 @@ exp/
 dataset/*_raw/
 dataset/*_alpaca_*/
 dataset/alpaca_client_splits_*/
+dataset/mmlu_client_splits_*/
 dataset/alpaca_classification_checkpoints/
 dataset/*.partial.jsonl
 dataset/*.tmp

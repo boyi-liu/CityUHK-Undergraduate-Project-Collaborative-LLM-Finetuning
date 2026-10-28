@@ -1,84 +1,128 @@
 # FedLLM Factory
 
-## Federated LoRA pipeline
+## Grouped MMLU federated training
 
-`federated_lora` simulates separate clients on one CUDA GPU. It prepares disjoint,
-task-skewed Alpaca partitions, runs synchronous rounds or asynchronous completion
-events, and maintains a global LoRA A/B pair on the server. It supports synthetic
-completion times or device-trace availability with session deadlines and MMLU
-evaluation. The runner's current factor averaging and staleness interpolation establish
-the pipeline; they are not yet the full set of baselines in the project brief.
+The active round-training setup uses MMLU in place of Alpaca-52k. It combines
+the `dev` and `validation` source splits for training. The 1,816 source rows
+produce 1,780 unique questions after removing 32 exact test matches and four
+repeated questions. Both source splits supply training data; neither acts as
+a validation holdout in this experiment.
 
-The experiment settings are in `configs/federated-lora-smoke.yaml`,
-`configs/federated-lora-pilot.yaml`, and `configs/federated-lora-full.yaml`.
-The example limit, client count, Dirichlet alpha, model, LoRA settings, local
-steps, selection count and mode are editable. Runs save the resolved
-configuration and a client-partition manifest.
+The repository contains:
 
-### Alpaca task groups
+- `dataset/mmlu_train.jsonl`: complete questions, four choices, answer labels,
+  original source indices, subjects, and major groups.
+- `dataset/mmlu_subject_groups.json`: the mapping of 57 subjects into eight groups.
+- `dataset/mmlu_train.manifest.json`: the pinned revision, file hashes, source
+  counts, duplicate exclusions, and group counts.
+- `dataset/MMLU-LICENSE.txt`: the source MIT license.
 
-`dataset/alpaca_task_groups.jsonl` contains one task-group label for each of the
-52,002 Stanford Alpaca rows, keyed by zero-based `source_index`. The eight groups
-are `create_content`, `transform_content`, `explain_describe`, `find_fact`,
-`suggest_design`, `classify`, `summarize`, and `calculate`. The original labels
-were assigned from instruction text. All 248 rows formerly in `other_unclear`
-were individually reviewed using instruction and input, then assigned to these
-eight groups. All 52,002 rows remain available for training. These are model-generated annotations,
-not Stanford's own per-row categories. The companion
-`dataset/alpaca_task_groups.manifest.json` records the source SHA-256, label counts,
-and classification provenance. The grouping file contains IDs, labels, and brief
-reasons, not the Alpaca examples themselves.
+The eight groups are mathematics; natural sciences; computing and engineering;
+medicine and health; business and economics; social sciences; history, law and
+philosophy; and general knowledge. This is the project's grouping. The source
+dataset does not supply these eight categories.
 
-`dataset/alpaca_task_group_overrides.jsonl` preserves the 248 reviewed decisions,
-including reasons and flags for 38 underspecified instructions. Action execution,
-scheduling, and model-training requests use the closest procedural group,
-`suggest_design`. Numerical forecasts use `calculate`; qualitative forecasts use
-`explain_describe`. These labels describe the requested task, not whether the
-request is answerable or its reference answer is correct. The classification tool
-applies the reviewed decisions when rebuilding labels from cached batches.
+Preparation assigns questions to five clients using a Dirichlet distribution
+with alpha 0.5 and seed 42. The full setup produces client sizes of 488, 304,
+247, 232, and 509. Each client holds a different mix of the groups. Every
+training question belongs to one client.
 
-Preparation checks the exact raw Alpaca file hash and label coverage before it
-assigns every selected row to a training client with a Dirichlet draw. The
-smoke and pilot configurations limit the rows for quick runs; `max_examples: null`
-in the full configuration assigns all 52,002 rows. Client assignments
-depend on the seed, client count, and Dirichlet alpha. Changing labels requires
-preparing the data again. There is no Alpaca validation or test split. Assigning
-all rows makes them available for training; client selection and local steps
-still control which rows are actually visited in a run.
+### Training settings
 
-On a Linux CUDA server, create an isolated environment once:
+| Setting | Full configuration |
+|---|---|
+| Base model | Qwen2.5-0.5B, pinned revision |
+| LoRA | Rank 8, alpha 32, dropout 0.1, `q_proj` and `v_proj` |
+| Batch size | 8, without accumulation |
+| Optimizer | Adam, learning rate 0.0002, no weight decay |
+| Local work | One epoch per client per round; fresh optimizer state |
+| Training limit | 128 tokens, right truncation, answer-only loss |
+| Precision | Frozen FP32 base; FP16 CUDA autocast; loss scaling |
+| Aggregation | Synchronous sample-weighted means of A and B |
+| Clients | All five clients participate in each round |
+| Evaluation | All 14,042 MMLU test questions, zero shot, full question context |
+| Stop rule | First strict accuracy decrease, or a maximum of 10 rounds |
+
+A round starts all clients from the same global adapter. Each client visits its
+whole partition once. The server waits for all five clients, combines their
+adapters, and evaluates the new global adapter before starting another round.
+
+The 128-token limit leaves answer targets in 1,383 of the 1,780 training rows.
+The other 397 rows remain assigned but add no answer loss. The output file
+`token_coverage.json` reports this limit. Test questions retain their full context.
+
+### Accuracy stopping and checkpoint selection
+
+The initial model is round 0. After each completed round, compare its accuracy
+with the preceding round on exactly the same questions. Stop if accuracy is
+strictly lower. Equal accuracy allows another round. Retain the earliest adapter
+with the highest observed accuracy, including round 0. Save the first lower
+round too, so its result can be reviewed.
+
+This rule uses the MMLU `test` split for checkpoint selection. It therefore acts
+as selection data in this experiment. The selected score is **not an independent
+final test score**. Reports and manifests record this role explicitly. A separate,
+untouched evaluation set is needed for an independent final assessment.
+
+### Verified stopping result
+
+The full-data GPU check stopped after round 4 and retained round 3 at 48.90%.
+See [the validation report](reports/mmlu-accuracy-stop.md) and its
+[configuration and verification record](reports/mmlu-accuracy-stop.json).
+These are checkpoint-selection scores, not independent final test scores.
+
+### Run
+
+Use Python 3.10 or newer on a CUDA server. Install the pinned runtime once:
 
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121 --extra-index-url https://pypi.org/simple
+python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
 python -m pip install -r requirements-federated-lora.txt
 ```
 
-From the repository root, prepare the official Stanford Alpaca data and run the
-small smoke experiment. The preparer downloads the research-only Alpaca
-dataset from `tatsu-lab/stanford_alpaca` into an ignored local directory; its
-data license is CC BY-NC 4.0.
+Run the active full configuration from the repository root:
+
+```bash
+python -m federated_lora prepare
+python -m federated_lora run --gpu 0
+```
+
+The default is `configs/federated-lora-full.yaml`. Training rows and groups are
+already in the repository. The first model run loads the pinned model and MMLU
+test data into local caches. The test examples and model weights stay outside Git.
+
+For a quick execution check, use the smoke configuration. It uses 120 training
+questions and 12 fixed selection questions; its scores are debug results.
+The pilot uses the full data with a three-round cap.
 
 ```bash
 python -m federated_lora prepare --config configs/federated-lora-smoke.yaml
-python -m federated_lora run --config configs/federated-lora-smoke.yaml --gpu 1
-python -m federated_lora run --config configs/federated-lora-smoke.yaml --mode async --gpu 1
+python -m federated_lora run --config configs/federated-lora-smoke.yaml --gpu 0
+python -m federated_lora run --gpu 0 --resume
 ```
 
-Check `nvidia-smi` and your server's GPU-use rules before choosing `--gpu`.
-The `--gpu` value is the physical index reported by `nvidia-smi`; training runs
-on one GPU at a time. Start with the smoke configuration, then prepare and run
-`configs/federated-lora-pilot.yaml` once the smoke run succeeds. Use
-`configs/federated-lora-full.yaml` to prepare all 52,002 rows for client
-training. A stopped run can be continued using the same command with `--resume`.
+Outputs include the resolved configuration, data and evaluation identities,
+token coverage, client metrics, predictions and adapters for every completed
+round, a resumable checkpoint, `best-adapter/`, and `summary.json`. A completed
+resume does not train or evaluate the same rounds again. It checks configuration
+and data identities before continuing an incomplete run.
 
-Outputs are under `exp/federated-lora-smoke/{sync,async}` or the pilot equivalent:
-`config.yaml`, `data_manifest.json`, `metrics.jsonl`, `checkpoint.pt`,
-`adapter.pt` and `summary.json`. The reported client losses are training losses,
-not evaluation scores. The trace-session runner below adds MMLU evaluation.
-Generated data, checkpoints and raw examples are excluded from Git.
+Rebuild the committed pool from the pinned source with:
+
+```bash
+python -m federated_lora.mmlu_data --cache-dir dataset/mmlu_raw
+```
+
+Sources: [MMLU on Hugging Face](https://huggingface.co/datasets/cais/mmlu/tree/c30699e8356da336a370243923dbaf21066bb9fe),
+[original MMLU repository](https://github.com/hendrycks/test).
+
+The active runner provides synchronous FedIT-style factor averaging. It does
+not claim to implement all four research baselines or the proposed asynchronous
+aggregation method. Earlier Alpaca assets and trace-session tools remain for
+historical experiments; the commands above use grouped MMLU.
+
 
 ### Device availability and session deadlines
 
