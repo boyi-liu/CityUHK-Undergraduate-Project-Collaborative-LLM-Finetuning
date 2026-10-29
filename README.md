@@ -118,10 +118,48 @@ python -m federated_lora.mmlu_data --cache-dir dataset/mmlu_raw
 Sources: [MMLU on Hugging Face](https://huggingface.co/datasets/cais/mmlu/tree/c30699e8356da336a370243923dbaf21066bb9fe),
 [original MMLU repository](https://github.com/hendrycks/test).
 
-The active runner provides synchronous FedIT-style factor averaging. It does
-not claim to implement all four research baselines or the proposed asynchronous
-aggregation method. Earlier Alpaca assets and trace-session tools remain for
-historical experiments; the commands above use grouped MMLU.
+The active round runner supports three synchronous methods:
+
+| Configuration | Method | Server rule |
+|---|---|---|
+| `configs/federated-lora-full.yaml` | FedIT-style | Average A and B separately, with sample weights |
+| `configs/ffa-lora.yaml` | FFA-LoRA | Keep the shared A fixed; train and average B only |
+| `configs/flora.yaml` | FLoRA | Stack weighted A factors and unweighted B factors; merge before fresh local training |
+
+```bash
+python -m federated_lora run --config configs/ffa-lora.yaml --gpu 0
+python -m federated_lora run --config configs/flora.yaml --gpu 1
+```
+
+Each new method has a `-smoke.yaml` configuration. It uses 120 training rows and
+12 selection questions. Use `python -m federated_lora.baseline_audit --config
+configs/flora.yaml` after a run to check the products, saved model, and resume.
+
+Both methods use the grouped MMLU pool, five clients, batch size 8, one local
+epoch, rank 8, alpha 32, and the same accuracy stop rule. FFA-LoRA and FLoRA use
+PEFT's Kaiming initialization for A and zero initialization for B. The older
+FedIT-style run used uniform A values from -0.01 to 0.01. This difference is
+recorded in each manifest. These experiments apply the reference algorithms
+with the project's settings. They do not reproduce the papers' result tables.
+FFA-LoRA runs without differential privacy; it makes no privacy guarantee.
+
+FLoRA starts a new local adapter each round, on the preceding global model.
+It keeps local rank 8. The rank of each five-client round stack is 40. Saved
+checkpoints retain all completed products as one cumulative adapter on the
+original base. Their rank grows by 40 per round. This form permits a standard
+PEFT reload and exact resume without an SVD or rank truncation. It is a storage
+form, not a rule that increases the local training rank. The runtime preserves
+alpha/r when it changes the saved rank. See [the method notes and GPU checks](reports/lora-baselines.md).
+
+For FLoRA only, `federation.client_ranks` can set one rank per client, for example
+`[4, 8, 12, 8, 4]`. Each client uses the same alpha/r ratio as the configured
+reference rank. Upload files contain local A/B factors. FFA-LoRA upload files
+contain B only; full model exports also retain the shared A for later loading.
+
+These options apply to the MMLU round runner. The older trace-session runner
+does not yet use these two methods. FedAsync-LoRA and the proposed asynchronous
+method remain separate work. Earlier Alpaca assets and trace-session tools
+remain for historical experiments; the commands above use grouped MMLU.
 
 
 ### Device availability and session deadlines

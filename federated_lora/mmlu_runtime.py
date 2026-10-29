@@ -66,12 +66,7 @@ class MMLURuntime:
         base.config.use_cache = False
         self.model = get_peft_model(base, LoraConfig(task_type=TaskType.CAUSAL_LM, r=settings["lora_rank"],
             lora_alpha=settings["lora_alpha"], lora_dropout=settings["lora_dropout"], target_modules=settings["target_modules"], bias="none"))
-        with torch.no_grad():
-            for name, value in self.model.named_parameters():
-                if "lora_A" in name:
-                    value.uniform_(-0.01, 0.01)
-                elif "lora_B" in name:
-                    value.zero_()
+        self.initialize_adapter()
         if any(p.requires_grad for n, p in self.model.named_parameters() if "lora_" not in n):
             raise RuntimeError("The base model must remain frozen")
         self.frozen_hashes = self.base_hashes()
@@ -106,6 +101,14 @@ class MMLURuntime:
             "model_revision": settings["revision"], "trainable_parameters": sum(p.numel() for p in self.model.parameters() if p.requires_grad),
             "torch_version": torch.__version__, "gpu": torch.cuda.get_device_name()}
 
+    def initialize_adapter(self):
+        with torch.no_grad():
+            for name, value in self.model.named_parameters():
+                if "lora_A" in name:
+                    value.uniform_(-0.01, 0.01)
+                elif "lora_B" in name:
+                    value.zero_()
+
     def base_hashes(self):
         return {name: hashlib.sha256(p.detach().cpu().contiguous().numpy().tobytes()).hexdigest()
                 for name, p in self.model.named_parameters() if "lora_" not in name}
@@ -127,9 +130,12 @@ class MMLURuntime:
     def encode(self, rows):
         return [encode_training(row, self.tokenizer, self.config["model"]["max_length"]) for row in rows]
 
-    def train(self, encoded, adapter, round_number, client_id):
+    def start_client(self, adapter, round_number, client_id):
         self.restore(adapter)
-        start_hash = adapter_hash(self.state())
+        return adapter_hash(self.state())
+
+    def train(self, encoded, adapter, round_number, client_id):
+        start_hash = self.start_client(adapter, round_number, client_id)
         cfg = self.config["training"]
         seed = self.config["seed"] + 1000 * round_number + client_id
         torch.manual_seed(seed)

@@ -17,6 +17,8 @@ def load_config(path: Path, mode_override: str | None = None) -> dict:
         from .mmlu_config import validate
         return validate(config)
     fed, train, model = config["federation"], config["training"], config["model"]
+    if fed.get("algorithm") in ("ffa_lora", "flora"):
+        raise ValueError("FFA-LoRA and FLoRA currently require the grouped MMLU round runner")
     if fed["mode"] not in ("sync", "async"):
         raise ValueError("federation.mode must be sync or async")
     if fed["client_count"] < 2 or not 1 <= fed["clients_per_round"] <= fed["client_count"]:

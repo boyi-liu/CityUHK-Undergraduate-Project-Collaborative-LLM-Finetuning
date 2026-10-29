@@ -12,11 +12,19 @@ def validate(config):
         raise ValueError("Pin the model revision to a full commit SHA")
     if fed["mode"] != "sync" or config.get("sessions", {}).get("enabled"):
         raise ValueError("The MMLU accuracy stopping rule requires synchronous rounds")
+    algorithm = fed.get("algorithm", "fedit")
+    if algorithm not in ("fedit", "ffa_lora", "flora"):
+        raise ValueError("Use fedit, ffa_lora, or flora for synchronous MMLU rounds")
     for key in ("client_count", "clients_per_round", "rounds"):
         if type(fed[key]) is not int or fed[key] < 1:
             raise ValueError("Client and round counts must be positive integers")
     if fed["client_count"] < 2 or fed["clients_per_round"] != fed["client_count"]:
         raise ValueError("All MMLU clients must participate in each round")
+    if "client_ranks" in fed:
+        ranks = fed["client_ranks"]
+        if (algorithm != "flora" or not isinstance(ranks, list) or len(ranks) != fed["client_count"]
+                or any(type(r) is not int or r < 1 for r in ranks)):
+            raise ValueError("Only FLoRA accepts one positive integer rank per client")
     for key in ("local_epochs", "micro_batch_size", "grad_accum"):
         if type(train[key]) is not int or train[key] < 1:
             raise ValueError("Epochs and batch settings must be positive integers")
@@ -25,7 +33,7 @@ def validate(config):
     for value in (train["learning_rate"], data["dirichlet_alpha"], model["lora_alpha"]):
         if isinstance(value, bool) or not math.isfinite(value) or value <= 0:
             raise ValueError("Learning rate, Dirichlet alpha, and LoRA alpha must be positive")
-    if model["lora_rank"] < 1 or model["max_length"] < 16 or not 0 <= model["lora_dropout"] < 1:
+    if type(model["lora_rank"]) is not int or model["lora_rank"] < 1 or model["max_length"] < 16 or not 0 <= model["lora_dropout"] < 1:
         raise ValueError("Invalid LoRA rank, dropout, or training length")
     if not isinstance(model["target_modules"], list) or not model["target_modules"]:
         raise ValueError("Use explicit LoRA target modules")

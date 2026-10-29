@@ -1,0 +1,702 @@
+{
+  "checked_at_utc": "2026-10-28T14:51:59.729577+00:00",
+  "local_unit_tests_passed": 71,
+  "server_baseline_unit_tests_passed": 6,
+  "schedule": "synchronous",
+  "n_shot": 0,
+  "selection_split": "test",
+  "independent_final_test": false,
+  "training_count": 1780,
+  "rows_with_answer_targets": 1383,
+  "client_counts": [
+    488,
+    304,
+    247,
+    232,
+    509
+  ],
+  "identical_partitions_and_evaluation_prompts": true,
+  "source_sha256": {
+    "baselines.py": "6b17c762be58336294a438cad6aeca9fd4a58c828ceb248a69e143b0b48f6893",
+    "baseline_runtime.py": "8128ce10ecb759e2420eddac716ab1c9341ea314fecd025c8e27ec96b3eaae16",
+    "baseline_audit.py": "9d337463b4451cdc4389850b0754c66094a38e313f239fd4d80cdbd149571463",
+    "mmlu_runtime.py": "d3e52a76468fb49c90a9e3d224907dd143933d4e2753649f52a1ad688291e52c",
+    "mmlu_runner.py": "9b0377a3a570b7c7250ce5a7e09ec6b2af693d9df24228c308012be0d44b14fa",
+    "mmlu_config.py": "f43189971d5a40841bc0b37527683ea89565f7a4c7e53eec6062ad85de254512",
+    "mmlu_data.py": "5169b0b113fc02f792f468fdf753b78366e3374c52c8c2d4f0241ea5e1f79a81",
+    "round_selection.py": "720dec6e4f0d076d036c344c6e0bd189a22d3a6f846f9b9332a98641b579d4d5"
+  },
+  "source_bundle_sha256": "4aeeda47de3698370d141842b6d4605cd3658878d5ecfe6a458c11f40f3e7bdd",
+  "runs": {
+    "ffa_lora": {
+      "configuration": {
+        "seed": 42,
+        "data": {
+          "dataset": "mmlu",
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "training_path": "dataset/mmlu_train.jsonl",
+          "manifest_path": "dataset/mmlu_train.manifest.json",
+          "subject_groups_path": "dataset/mmlu_subject_groups.json",
+          "output_dir": "dataset/mmlu_client_splits_full",
+          "max_examples": null,
+          "dirichlet_alpha": 0.5
+        },
+        "model": {
+          "name": "Qwen/Qwen2.5-0.5B",
+          "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+          "max_length": 128,
+          "lora_rank": 8,
+          "lora_alpha": 32,
+          "lora_dropout": 0.1,
+          "target_modules": [
+            "q_proj",
+            "v_proj"
+          ]
+        },
+        "training": {
+          "local_epochs": 1,
+          "micro_batch_size": 8,
+          "grad_accum": 1,
+          "learning_rate": 0.0002,
+          "optimizer": "Adam",
+          "weight_decay": 0
+        },
+        "federation": {
+          "algorithm": "ffa_lora",
+          "mode": "sync",
+          "client_count": 5,
+          "clients_per_round": 5,
+          "rounds": 10
+        },
+        "evaluation": {
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "cache_dir": "dataset/mmlu_raw",
+          "n_shot": 0,
+          "max_length": 4096,
+          "max_samples": null,
+          "subset_seed": 42
+        },
+        "stopping": {
+          "rule": "first_accuracy_drop",
+          "split": "test",
+          "include_initial": true
+        },
+        "output_dir": "exp/ffa-lora-mmlu"
+      },
+      "baseline_accuracy": 0.4677396382281726,
+      "selected_round": 3,
+      "selected_correct": 6791,
+      "selected_accuracy": 0.4836205668708161,
+      "stopped_round": 5,
+      "stop_reason": "first_accuracy_drop",
+      "best_adapter_sha256": "24371542da4e0b4e6238127d8de798da8d51ff180d2ec1eb572dff0c91436f41",
+      "trainable_local_parameters": 196608,
+      "local_upload_bytes": 786432,
+      "successful_optimizer_steps": 1115,
+      "skipped_optimizer_steps": 0,
+      "no_target_batches": 0,
+      "local_training_seconds": 115.48294021189213,
+      "evaluation_seconds": 395.572696313262,
+      "all_local_epochs_cover_each_assigned_row_once": true,
+      "all_local_training_ranks_are_8": true,
+      "initial_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d",
+      "evaluation_prompts_sha256": "e8d1dbd088822966bfdb0452afe523a209fe01d763c2bb604f11e53dfcaf876a",
+      "round_history": [
+        {
+          "round": 0,
+          "correct": 6568,
+          "count": 14042,
+          "accuracy": 0.4677396382281726,
+          "answer_nll": 1.2127414318614687,
+          "seconds": 69.43733277916908
+        },
+        {
+          "round": 1,
+          "correct": 6695,
+          "count": 14042,
+          "accuracy": 0.4767839339125481,
+          "answer_nll": 1.1511466879537706,
+          "training_loss": 1.170325764191599,
+          "decreased_from_previous": false,
+          "selected_round": 1,
+          "checkpoint_rank": 8,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 69.2960546463728,
+          "global_adapter_sha256": "09b35d44de5cf64f0fa65eed89a75b1c901172180a1d56292156dd499af7c8b5"
+        },
+        {
+          "round": 2,
+          "correct": 6751,
+          "count": 14042,
+          "accuracy": 0.4807719698048711,
+          "answer_nll": 1.1500999906354088,
+          "training_loss": 1.1066488237460281,
+          "decreased_from_previous": false,
+          "selected_round": 2,
+          "checkpoint_rank": 8,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 69.35891035199165,
+          "global_adapter_sha256": "00640fedca9c446de0937e771c53514ec3d134866b74a67bfad336314020cd8e"
+        },
+        {
+          "round": 3,
+          "correct": 6791,
+          "count": 14042,
+          "accuracy": 0.4836205668708161,
+          "answer_nll": 1.1514667881876233,
+          "training_loss": 1.0476340372021096,
+          "decreased_from_previous": false,
+          "selected_round": 3,
+          "checkpoint_rank": 8,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 66.60972419381142,
+          "global_adapter_sha256": "24371542da4e0b4e6238127d8de798da8d51ff180d2ec1eb572dff0c91436f41"
+        },
+        {
+          "round": 4,
+          "correct": 6791,
+          "count": 14042,
+          "accuracy": 0.4836205668708161,
+          "answer_nll": 1.1845250622581138,
+          "training_loss": 0.9814416436897355,
+          "decreased_from_previous": false,
+          "selected_round": 3,
+          "checkpoint_rank": 8,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 60.463494792580605,
+          "global_adapter_sha256": "5051a0d87d81798722b4162e050eb8dc64d9a2e93448c5e77cd7ec9f7450715b"
+        },
+        {
+          "round": 5,
+          "correct": 6766,
+          "count": 14042,
+          "accuracy": 0.48184019370460046,
+          "answer_nll": 1.21708555988954,
+          "training_loss": 0.9144145174252323,
+          "decreased_from_previous": true,
+          "selected_round": 3,
+          "checkpoint_rank": 8,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 60.40717954933643,
+          "global_adapter_sha256": "b6837ec1054e5ef51001cd4981ad9d73d4dc7766fca72a3ee439a2b9ad3ca698"
+        }
+      ],
+      "audit": {
+        "algorithm": "ffa_lora",
+        "round_products": [
+          {
+            "round": 1,
+            "checkpoint_rank": 8,
+            "largest_product_error": 0.0,
+            "product_check_passed": true
+          },
+          {
+            "round": 2,
+            "checkpoint_rank": 8,
+            "largest_product_error": 0.0,
+            "product_check_passed": true
+          },
+          {
+            "round": 3,
+            "checkpoint_rank": 8,
+            "largest_product_error": 0.0,
+            "product_check_passed": true
+          },
+          {
+            "round": 4,
+            "checkpoint_rank": 8,
+            "largest_product_error": 0.0,
+            "product_check_passed": true
+          },
+          {
+            "round": 5,
+            "checkpoint_rank": 8,
+            "largest_product_error": 0.0,
+            "product_check_passed": true
+          }
+        ],
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_rounds": true,
+        "original_frozen_base_verified": true,
+        "selected_correct": 6791,
+        "selection_count": 14042,
+        "independent_final_test": false
+      }
+    },
+    "flora": {
+      "configuration": {
+        "seed": 42,
+        "data": {
+          "dataset": "mmlu",
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "training_path": "dataset/mmlu_train.jsonl",
+          "manifest_path": "dataset/mmlu_train.manifest.json",
+          "subject_groups_path": "dataset/mmlu_subject_groups.json",
+          "output_dir": "dataset/mmlu_client_splits_full",
+          "max_examples": null,
+          "dirichlet_alpha": 0.5
+        },
+        "model": {
+          "name": "Qwen/Qwen2.5-0.5B",
+          "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+          "max_length": 128,
+          "lora_rank": 8,
+          "lora_alpha": 32,
+          "lora_dropout": 0.1,
+          "target_modules": [
+            "q_proj",
+            "v_proj"
+          ]
+        },
+        "training": {
+          "local_epochs": 1,
+          "micro_batch_size": 8,
+          "grad_accum": 1,
+          "learning_rate": 0.0002,
+          "optimizer": "Adam",
+          "weight_decay": 0
+        },
+        "federation": {
+          "algorithm": "flora",
+          "mode": "sync",
+          "client_count": 5,
+          "clients_per_round": 5,
+          "rounds": 10
+        },
+        "evaluation": {
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "cache_dir": "dataset/mmlu_raw",
+          "n_shot": 0,
+          "max_length": 4096,
+          "max_samples": null,
+          "subset_seed": 42
+        },
+        "stopping": {
+          "rule": "first_accuracy_drop",
+          "split": "test",
+          "include_initial": true
+        },
+        "output_dir": "exp/flora-mmlu"
+      },
+      "baseline_accuracy": 0.4677396382281726,
+      "selected_round": 3,
+      "selected_correct": 6820,
+      "selected_accuracy": 0.48568579974362625,
+      "stopped_round": 4,
+      "stop_reason": "first_accuracy_drop",
+      "best_adapter_sha256": "881a59da289935e2697accfc3a8c194fe06c17e32c439c5d30f694bb8701546f",
+      "trainable_local_parameters": 540672,
+      "local_upload_bytes": 2162688,
+      "successful_optimizer_steps": 892,
+      "skipped_optimizer_steps": 0,
+      "no_target_batches": 0,
+      "local_training_seconds": 88.4904964864254,
+      "evaluation_seconds": 301.54245004057884,
+      "all_local_epochs_cover_each_assigned_row_once": true,
+      "all_local_training_ranks_are_8": true,
+      "initial_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d",
+      "evaluation_prompts_sha256": "e8d1dbd088822966bfdb0452afe523a209fe01d763c2bb604f11e53dfcaf876a",
+      "round_history": [
+        {
+          "round": 0,
+          "correct": 6568,
+          "count": 14042,
+          "accuracy": 0.4677396382281726,
+          "answer_nll": 1.2127414318614687,
+          "seconds": 60.05147860944271
+        },
+        {
+          "round": 1,
+          "correct": 6733,
+          "count": 14042,
+          "accuracy": 0.47949010112519586,
+          "answer_nll": 1.1478790729835076,
+          "training_loss": 1.1686546807800267,
+          "decreased_from_previous": false,
+          "selected_round": 1,
+          "checkpoint_rank": 40,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 60.10607397556305,
+          "global_adapter_sha256": "2b108246e9c900d50e3a2211b18628f9f196fa44fe7477220b7c15eb5809bdf9"
+        },
+        {
+          "round": 2,
+          "correct": 6800,
+          "count": 14042,
+          "accuracy": 0.48426150121065376,
+          "answer_nll": 1.1483622968885545,
+          "training_loss": 1.0899404400686208,
+          "decreased_from_previous": false,
+          "selected_round": 2,
+          "checkpoint_rank": 80,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 60.337436601519585,
+          "global_adapter_sha256": "8adc8ffa419c066ba69ab015ee35bbd5ac4bb0c98d7c1a9d996d6a98502784e3"
+        },
+        {
+          "round": 3,
+          "correct": 6820,
+          "count": 14042,
+          "accuracy": 0.48568579974362625,
+          "answer_nll": 1.1531022925370267,
+          "training_loss": 1.0260318452606836,
+          "decreased_from_previous": false,
+          "selected_round": 3,
+          "checkpoint_rank": 120,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 60.475854113698006,
+          "global_adapter_sha256": "881a59da289935e2697accfc3a8c194fe06c17e32c439c5d30f694bb8701546f"
+        },
+        {
+          "round": 4,
+          "correct": 6746,
+          "count": 14042,
+          "accuracy": 0.48041589517162797,
+          "answer_nll": 1.1998117016790568,
+          "training_loss": 0.9528102284797015,
+          "decreased_from_previous": true,
+          "selected_round": 3,
+          "checkpoint_rank": 160,
+          "local_ranks": [
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "seconds": 60.57160674035549,
+          "global_adapter_sha256": "c5100962314efb0030db30c2cad2bb5f10eb827f212938ee5fa987d4440d1cbd"
+        }
+      ],
+      "audit": {
+        "algorithm": "flora",
+        "round_products": [
+          {
+            "round": 1,
+            "checkpoint_rank": 40,
+            "largest_product_error": 4.0745362639427185e-10,
+            "product_check_passed": true
+          },
+          {
+            "round": 2,
+            "checkpoint_rank": 80,
+            "largest_product_error": 5.820766091346741e-10,
+            "product_check_passed": true
+          },
+          {
+            "round": 3,
+            "checkpoint_rank": 120,
+            "largest_product_error": 8.149072527885437e-10,
+            "product_check_passed": true
+          },
+          {
+            "round": 4,
+            "checkpoint_rank": 160,
+            "largest_product_error": 9.313225746154785e-10,
+            "product_check_passed": true
+          }
+        ],
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_rounds": true,
+        "original_frozen_base_verified": true,
+        "selected_correct": 6820,
+        "selection_count": 14042,
+        "independent_final_test": false
+      }
+    }
+  },
+  "smoke_checks": {
+    "ffa-lora-mmlu-smoke": {
+      "audit": {
+        "algorithm": "ffa_lora",
+        "round_products": [
+          {
+            "round": 1,
+            "checkpoint_rank": 8,
+            "largest_product_error": 0.0,
+            "product_check_passed": true
+          },
+          {
+            "round": 2,
+            "checkpoint_rank": 8,
+            "largest_product_error": 0.0,
+            "product_check_passed": true
+          }
+        ],
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_rounds": true,
+        "original_frozen_base_verified": true,
+        "selected_correct": 6,
+        "selection_count": 12,
+        "independent_final_test": false
+      },
+      "configuration": {
+        "seed": 42,
+        "data": {
+          "dataset": "mmlu",
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "training_path": "dataset/mmlu_train.jsonl",
+          "manifest_path": "dataset/mmlu_train.manifest.json",
+          "subject_groups_path": "dataset/mmlu_subject_groups.json",
+          "output_dir": "dataset/mmlu_client_splits_smoke",
+          "max_examples": 120,
+          "dirichlet_alpha": 0.5
+        },
+        "model": {
+          "name": "Qwen/Qwen2.5-0.5B",
+          "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+          "max_length": 128,
+          "lora_rank": 8,
+          "lora_alpha": 32,
+          "lora_dropout": 0.1,
+          "target_modules": [
+            "q_proj",
+            "v_proj"
+          ]
+        },
+        "training": {
+          "local_epochs": 1,
+          "micro_batch_size": 8,
+          "grad_accum": 1,
+          "learning_rate": 0.0002,
+          "optimizer": "Adam",
+          "weight_decay": 0
+        },
+        "federation": {
+          "algorithm": "ffa_lora",
+          "mode": "sync",
+          "client_count": 5,
+          "clients_per_round": 5,
+          "rounds": 2
+        },
+        "evaluation": {
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "cache_dir": "dataset/mmlu_raw",
+          "n_shot": 0,
+          "max_length": 4096,
+          "max_samples": 12,
+          "subset_seed": 42
+        },
+        "stopping": {
+          "rule": "first_accuracy_drop",
+          "split": "test",
+          "include_initial": true
+        },
+        "output_dir": "exp/ffa-lora-mmlu-smoke"
+      }
+    },
+    "flora-mmlu-smoke": {
+      "audit": {
+        "algorithm": "flora",
+        "round_products": [
+          {
+            "round": 1,
+            "checkpoint_rank": 40,
+            "largest_product_error": 9.458744898438454e-11,
+            "product_check_passed": true
+          },
+          {
+            "round": 2,
+            "checkpoint_rank": 80,
+            "largest_product_error": 1.7462298274040222e-10,
+            "product_check_passed": true
+          }
+        ],
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_rounds": true,
+        "original_frozen_base_verified": true,
+        "selected_correct": 6,
+        "selection_count": 12,
+        "independent_final_test": false
+      },
+      "configuration": {
+        "seed": 42,
+        "data": {
+          "dataset": "mmlu",
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "training_path": "dataset/mmlu_train.jsonl",
+          "manifest_path": "dataset/mmlu_train.manifest.json",
+          "subject_groups_path": "dataset/mmlu_subject_groups.json",
+          "output_dir": "dataset/mmlu_client_splits_smoke",
+          "max_examples": 120,
+          "dirichlet_alpha": 0.5
+        },
+        "model": {
+          "name": "Qwen/Qwen2.5-0.5B",
+          "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+          "max_length": 128,
+          "lora_rank": 8,
+          "lora_alpha": 32,
+          "lora_dropout": 0.1,
+          "target_modules": [
+            "q_proj",
+            "v_proj"
+          ]
+        },
+        "training": {
+          "local_epochs": 1,
+          "micro_batch_size": 8,
+          "grad_accum": 1,
+          "learning_rate": 0.0002,
+          "optimizer": "Adam",
+          "weight_decay": 0
+        },
+        "federation": {
+          "algorithm": "flora",
+          "mode": "sync",
+          "client_count": 5,
+          "clients_per_round": 5,
+          "rounds": 2
+        },
+        "evaluation": {
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "cache_dir": "dataset/mmlu_raw",
+          "n_shot": 0,
+          "max_length": 4096,
+          "max_samples": 12,
+          "subset_seed": 42
+        },
+        "stopping": {
+          "rule": "first_accuracy_drop",
+          "split": "test",
+          "include_initial": true
+        },
+        "output_dir": "exp/flora-mmlu-smoke"
+      }
+    },
+    "flora-mmlu-heterogeneous-smoke": {
+      "audit": {
+        "algorithm": "flora",
+        "round_products": [
+          {
+            "round": 1,
+            "checkpoint_rank": 36,
+            "largest_product_error": 1.0186340659856796e-10,
+            "product_check_passed": true
+          },
+          {
+            "round": 2,
+            "checkpoint_rank": 72,
+            "largest_product_error": 1.7462298274040222e-10,
+            "product_check_passed": true
+          }
+        ],
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_rounds": true,
+        "original_frozen_base_verified": true,
+        "selected_correct": 6,
+        "selection_count": 12,
+        "independent_final_test": false
+      },
+      "configuration": {
+        "seed": 42,
+        "data": {
+          "dataset": "mmlu",
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "training_path": "dataset/mmlu_train.jsonl",
+          "manifest_path": "dataset/mmlu_train.manifest.json",
+          "subject_groups_path": "dataset/mmlu_subject_groups.json",
+          "output_dir": "dataset/mmlu_client_splits_smoke",
+          "max_examples": 120,
+          "dirichlet_alpha": 0.5
+        },
+        "model": {
+          "name": "Qwen/Qwen2.5-0.5B",
+          "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+          "max_length": 128,
+          "lora_rank": 8,
+          "lora_alpha": 32,
+          "lora_dropout": 0.1,
+          "target_modules": [
+            "q_proj",
+            "v_proj"
+          ]
+        },
+        "training": {
+          "local_epochs": 1,
+          "micro_batch_size": 8,
+          "grad_accum": 1,
+          "learning_rate": 0.0002,
+          "optimizer": "Adam",
+          "weight_decay": 0
+        },
+        "federation": {
+          "algorithm": "flora",
+          "mode": "sync",
+          "client_count": 5,
+          "clients_per_round": 5,
+          "rounds": 2,
+          "client_ranks": [
+            4,
+            8,
+            12,
+            8,
+            4
+          ]
+        },
+        "evaluation": {
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "cache_dir": "dataset/mmlu_raw",
+          "n_shot": 0,
+          "max_length": 4096,
+          "max_samples": 12,
+          "subset_seed": 42
+        },
+        "stopping": {
+          "rule": "first_accuracy_drop",
+          "split": "test",
+          "include_initial": true
+        },
+        "output_dir": "exp/flora-mmlu-heterogeneous-smoke"
+      }
+    }
+  }
+}

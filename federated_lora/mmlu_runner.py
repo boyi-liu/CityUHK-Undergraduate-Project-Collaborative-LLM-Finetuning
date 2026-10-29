@@ -8,6 +8,7 @@ import torch
 from .mmlu_data import prepare, load_prepared, load_pool, question_key, digest
 from .mmlu_runtime import MMLURuntime, weighted_mean, adapter_hash
 from .round_selection import AccuracySelection
+from .baselines import method, upload, aggregate, rank
 
 
 def write_json(path, value):
@@ -24,7 +25,14 @@ def save_checkpoint(path, value):
     os.replace(temporary, path)
 
 
-def run(config, root, resume=False, runtime_factory=MMLURuntime):
+def run(config, root, resume=False, runtime_factory=None):
+    algorithm = method(config)
+    if runtime_factory is None:
+        if algorithm == "fedit":
+            runtime_factory = MMLURuntime
+        else:
+            from .baseline_runtime import BaselineRuntime
+            runtime_factory = BaselineRuntime
     root = Path(root)
     prepared_path = root / config["data"]["output_dir"] / "manifest.json"
     if not prepared_path.exists():
@@ -73,11 +81,21 @@ def run(config, root, resume=False, runtime_factory=MMLURuntime):
             adapter, job = runtime.train(rows, starting, rnd, cid)
             if job["start_adapter_sha256"] != adapter_hash(starting):
                 raise RuntimeError("A client did not start from the current global adapter")
-            runtime.save(directory / "clients" / f"round-{rnd}" / f"client-{cid}", adapter)
+            client_path = directory / "clients" / f"round-{rnd}" / f"client-{cid}"
+            if algorithm == "fedit":
+                runtime.save(client_path, adapter)
+            else:
+                payload = upload(algorithm, adapter, starting)
+                client_path.mkdir(parents=True, exist_ok=True)
+                save_checkpoint(client_path / "upload.pt", payload)
+                job["upload_bytes"] = sum(v.numel() * v.element_size() for v in payload.values())
+                job["upload_keys"] = sorted(payload)
+                adapter = payload
             write_json(directory / f"client-round-{rnd}-{cid}.json", job)
             updates.append(adapter)
             jobs.append(job)
-        current = weighted_mean(updates, [len(rows) for rows in clients])
+        counts = [len(rows) for rows in clients]
+        current = weighted_mean(updates, counts) if algorithm == "fedit" else aggregate(algorithm, starting, updates, counts)
         runtime.save(directory / f"round-{rnd}-adapter", current)
         metrics = runtime.evaluate(current, rnd)
         previous_best = policy.best_round
@@ -87,6 +105,10 @@ def run(config, root, resume=False, runtime_factory=MMLURuntime):
         event = {**metrics, "decreased_from_previous": decreased, "selected_round": policy.best_round,
                  "global_adapter_sha256": adapter_hash(current), "client_start_adapter_sha256": adapter_hash(starting),
                  "training_loss": sum(j["loss_sum"] for j in jobs) / sum(j["target_tokens"] for j in jobs)}
+        if algorithm != "fedit":
+            event.update({"algorithm": algorithm, "checkpoint_rank": rank(current),
+                          "local_ranks": [j["local_rank"] for j in jobs],
+                          "client_upload_bytes": [j["upload_bytes"] for j in jobs]})
         state["adapter"] = current
         state["selection"] = policy.to_dict()
         state["history"].append(event)
@@ -107,5 +129,9 @@ def run(config, root, resume=False, runtime_factory=MMLURuntime):
               "selection_split": "test", "independent_final_test": False, "test_used_for_checkpoint_selection": True,
               "scope": runtime.manifest["scope"], "data": manifest, "token_coverage": coverage,
               "best_adapter_sha256": adapter_hash(state["best_adapter"]), "frozen_base_verified": True}
+    if algorithm != "fedit":
+        result.update({"algorithm": algorithm, "schedule": "synchronous",
+                       "best_checkpoint_rank": rank(state["best_adapter"]),
+                       "differential_privacy": False})
     write_json(directory / "summary.json", result)
     return result
