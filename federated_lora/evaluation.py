@@ -70,6 +70,8 @@ def score_candidates(model, prefix: list[int], completions: list[list[int]], dev
 
 class MMLUEvaluator:
     def __init__(self, settings: dict, tokenizer, root):
+        if type(settings["n_shot"]) is not int or settings["n_shot"] != 0:
+            raise ValueError("New MMLU runs require zero-shot evaluation (n_shot: 0)")
         from datasets import load_dataset
 
         self.settings, self.tokenizer = settings, tokenizer

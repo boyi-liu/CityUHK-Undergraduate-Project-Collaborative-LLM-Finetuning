@@ -1,0 +1,71 @@
+seed: 42
+data:
+  dataset: mmlu
+  revision: c30699e8356da336a370243923dbaf21066bb9fe
+  training_path: dataset/mmlu_train.jsonl
+  manifest_path: dataset/mmlu_train.manifest.json
+  subject_groups_path: dataset/mmlu_subject_groups.json
+  output_dir: dataset/mmlu_client_splits_full
+  max_examples: null
+  dirichlet_alpha: 0.5
+model:
+  name: Qwen/Qwen2.5-0.5B
+  revision: 060db6499f32faf8b98477b0a26969ef7d8b9987
+  max_length: 128
+  lora_rank: 8
+  lora_alpha: 32
+  lora_dropout: 0.1
+  target_modules:
+  - q_proj
+  - v_proj
+training:
+  local_epochs: 1
+  micro_batch_size: 8
+  grad_accum: 1
+  learning_rate: 0.0002
+  optimizer: SGD
+  weight_decay: 0
+  proximal_rho: 0.005
+federation:
+  algorithm: fedasync_lora
+  mode: async
+  client_count: 5
+  max_active: 5
+  mixing_alpha: 0.6
+  staleness:
+    function: polynomial
+    a: 0.5
+evaluation:
+  revision: c30699e8356da336a370243923dbaf21066bb9fe
+  cache_dir: dataset/mmlu_raw
+  n_shot: 0
+  max_length: 4096
+  max_samples: null
+  subset_seed: 42
+  interval_seconds: 600
+stopping:
+  rule: session_deadline
+output_dir: exp/mmlu-trace-fedasync-lora-pilot
+sessions:
+  enabled: true
+  availability: trace
+  participation: repeated
+  trace_path: dataset/device_usage_traces.json
+  trace_ids:
+  - 0
+  - 1
+  - 3
+  - 4
+  - 7
+  time_basis: recorded_local
+  start_date: '2020-01-30'
+  start_time: 06:30
+  end_time: 06:50
+  count: 2
+  min_window_seconds: 60
+timing:
+  agx_client_ids:
+  - 0
+  speed_scale: 1.0
+  upload_mbps: 1.0
+  dry_run_adapter_bytes: 2162688

@@ -26,7 +26,13 @@ def save_checkpoint(path, value):
 
 
 def run(config, root, resume=False, runtime_factory=None):
+    if config.get("sessions", {}).get("enabled"):
+        from .trace_baselines import run_sessions
+        return run_sessions(config, root, resume=resume, runtime_factory=runtime_factory)
     algorithm = method(config)
+    if algorithm == "fedasync_lora":
+        from .fedasync_runner import run as run_async
+        return run_async(config, root, resume=resume, runtime_factory=runtime_factory)
     if runtime_factory is None:
         if algorithm == "fedit":
             runtime_factory = MMLURuntime

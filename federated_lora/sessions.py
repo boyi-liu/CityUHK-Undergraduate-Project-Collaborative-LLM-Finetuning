@@ -10,8 +10,18 @@ from xml.sax.saxutils import escape
 from .traces import load_traces
 
 
+def run_directory(config: dict, root: Path, dry_run=False) -> Path:
+    directory = root / config["output_dir"]
+    if dry_run:
+        directory /= "dry-run"
+    return directory / config["sessions"].get("availability", "trace") / config["federation"]["mode"]
+
+
 def prepare_sessions(config: dict, root: Path) -> dict:
     settings = config["sessions"]
+    condition = settings.get("availability", "trace")
+    if condition not in ("trace", "always"):
+        raise ValueError("sessions.availability must be trace or always")
     traces = load_traces(root / settings["trace_path"], settings.get("min_window_seconds", 60))
     ids = [str(x) for x in settings["trace_ids"]]
     if len(ids) != config["federation"]["client_count"] or len(set(ids)) != len(ids):
@@ -43,13 +53,19 @@ def prepare_sessions(config: dict, root: Path) -> dict:
             raise ValueError(f"Trace {key} does not cover all requested sessions; choose covered dates/IDs")
         windows = [{**w, "start_us": ticks(w["start"]), "end_us": ticks(w["end"])}
                    for w in device["windows"]]
+        if condition == "always":
+            windows = [{"id": s["index"], "start": s["start"], "end": s["deadline"],
+                        "start_us": ticks(s["start"]), "end_us": ticks(s["deadline"])} for s in sessions]
         clients.append({"client_id": client_id, "trace_id": key, **device, "windows": windows})
     for session in sessions:
         session.update(start_us=ticks(session["start"]), deadline_us=ticks(session["deadline"]))
         session["client_available_seconds"] = [
             sum(max(0, min(w["end_us"], session["deadline_us"]) - max(w["start_us"], session["start_us"]))
                 for w in client["windows"]) / 1_000_000 for client in clients]
-    return {"format_version": 1, **{k: v for k, v in traces.items() if k != "devices"},
+    return {"format_version": 2, **{k: v for k, v in traces.items() if k != "devices"},
+            "availability": condition, "participation": settings.get("participation", "repeated"),
+            "availability_rule": (traces.get("availability_rule") if condition == "trace"
+                                  else "Every client available throughout each session"),
             "time_basis": "recorded_local (timezone unverified)", "epoch": epoch.isoformat(),
             "continuity": "global_adapter", "sessions": sessions, "clients": clients}
 
@@ -63,11 +79,14 @@ def write_schedule(manifest: dict, directory: Path) -> None:
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="{height}" viewBox="0 0 1000 {height}">',
              '<rect width="100%" height="100%" fill="white"/>',
              '<g font-family="sans-serif" font-size="13" fill="#142c46">',
-             '<text x="20" y="22">Recorded availability: (screen off OR locked) AND charging AND Wi-Fi</text>']
+             f'<text x="20" y="22">{escape(manifest.get("availability_rule", "Device availability"))}</text>']
     for session in manifest["sessions"]:
         top = 35 + session["index"] * panel_height
         span = session["deadline_us"] - session["start_us"]
         parts.append(f'<text x="20" y="{top + 18}">{escape(session["start"])} to {escape(session["deadline"])}</text>')
+        for hour in range(int(span / 3_600_000_000) + 1):
+            x = left + width * hour * 3_600_000_000 / span
+            parts.append(f'<text x="{x:.1f}" y="{top + 35}" text-anchor="middle">{hour}h</text>')
         for client in manifest["clients"]:
             y = top + 40 + client["client_id"] * row_height
             label = f'Client {client["client_id"]} / trace {client["trace_id"]}'

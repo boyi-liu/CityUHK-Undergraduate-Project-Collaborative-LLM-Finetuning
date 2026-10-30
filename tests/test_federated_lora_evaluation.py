@@ -1,7 +1,7 @@
 import importlib.util
 import unittest
 
-from federated_lora.evaluation import candidate_tokens, fit_question, format_question, score_candidates
+from federated_lora.evaluation import MMLUEvaluator, candidate_tokens, fit_question, format_question, score_candidates
 
 
 class CharacterTokenizer:
@@ -10,6 +10,11 @@ class CharacterTokenizer:
 
 
 class EvaluationTests(unittest.TestCase):
+    def test_new_evaluator_rejects_demonstrations_before_loading_data(self):
+        for shots in (1, 5, True):
+            with self.subTest(shots=shots), self.assertRaisesRegex(ValueError, "zero-shot"):
+                MMLUEvaluator({"n_shot": shots}, CharacterTokenizer(), None)
+
     def setUp(self):
         self.row = {"question": "Which?", "choices": ["one", "two", "three", "four"],
                     "subject": "test_subject", "answer": 3}

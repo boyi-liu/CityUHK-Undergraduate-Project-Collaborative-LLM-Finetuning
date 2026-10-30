@@ -11,7 +11,9 @@ from federated_lora.sessions import prepare_sessions
 
 def config(mode="async"):
     return {"seed": 42, "model": {"name": "Qwen/Qwen2.5-0.5B"},
-            "training": {"local_steps": 2},
+            # Historical rules remain testable; comparison configs use repeated.
+            "sessions": {"participation": "once_per_window"},
+            "training": {"local_epochs": 1, "micro_batch_size": 1, "grad_accum": 32},
             "timing": {"agx_client_ids": [0], "upload_mbps": 1.0, "speed_scale": 1.0},
             "federation": {"mode": mode, "client_count": 2, "clients_per_round": 2, "max_active": 2}}
 
@@ -76,10 +78,24 @@ class AvailabilityTests(unittest.TestCase):
         self.assertGreater(result["stats"]["out_of_order"], 0)
 
     def test_timing_is_reproducible_and_upload_units_are_correct(self):
-        first = job_durations(config(), 0, 0, 125000)
-        self.assertEqual(first, job_durations(config(), 0, 0, 125000))
+        first = job_durations(config(), 0, 0, 125000, 64)
+        self.assertEqual(first, job_durations(config(), 0, 0, 125000, 64))
         self.assertEqual(first["upload_us"], 1000000)
         self.assertGreater(first["train_us"], 0)
+        larger = job_durations(config(), 0, 0, 125000, 129)
+        self.assertEqual(first["optimizer_steps"], 2)
+        self.assertEqual(larger["optimizer_steps"], 5)
+        self.assertAlmostEqual(larger["train_us"] / first["train_us"], 2.5, places=6)
+
+    def test_scheduler_uses_each_clients_epoch_size(self):
+        settings = config()
+        engine = SessionScheduler(settings, manifest([[(0, 100_000_000)], [(0, 100_000_000)]]),
+                                  100, 0.0, train, aggregate, client_sizes=[32, 65])
+        state = engine.run()
+        jobs = {row["client"]: row for row in state["history"] if row["event"] == "job_started"}
+        self.assertEqual(jobs[0]["optimizer_steps"], 1)
+        self.assertEqual(jobs[1]["optimizer_steps"], 3)
+        self.assertEqual(jobs[1]["training_examples"], 65)
 
 
 class SchedulerTests(unittest.TestCase):
@@ -177,6 +193,101 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(state["version"], 2)
         self.assertEqual(state["summaries"][1]["server_updates"], 0)
 
+    @patch("federated_lora.scheduler.job_durations", return_value=costs())
+    def test_repeated_jobs_start_from_latest_global_after_upload(self, _):
+        settings = config()
+        settings["sessions"]["participation"] = "repeated"
+        state = SessionScheduler(settings, manifest([[(0, 60)], []], ((0, 60),)),
+                                 100, 0.0, train, aggregate).run()
+        starts = [e for e in state["history"] if e["event"] == "job_started"]
+        self.assertEqual([e["time_us"] for e in starts], [0, 15, 30, 45])
+        self.assertEqual([e["base_version"] for e in starts], [0, 1, 2, 3])
+        self.assertEqual(state["version"], 4)  # Upload at the deadline counts.
+        self.assertEqual(state["adapter"], 2.0)
+
+    @patch("federated_lora.scheduler.job_durations", return_value=costs())
+    def test_repeated_training_gives_waiting_clients_capacity(self, _):
+        settings = config()
+        settings["sessions"]["participation"] = "repeated"
+        settings["federation"]["max_active"] = 1
+        state = SessionScheduler(settings, manifest([[(0, 60)], [(0, 60)]], ((0, 60),)),
+                                 100, 0.0, train, aggregate).run()
+        starts = [e for e in state["history"] if e["event"] == "job_started"]
+        self.assertEqual([e["client"] for e in starts], [0, 1, 0, 1])
+
+    @patch("federated_lora.scheduler.job_durations", return_value=costs())
+    def test_periodic_evaluation_observes_arrivals_and_does_not_advance_clock(self, _):
+        settings = config()
+        settings["sessions"]["participation"] = "repeated"
+        settings["evaluation"] = {"interval_seconds": 0.000015}
+        observed = []
+
+        def evaluate(adapter, index, point):
+            observed.append((point["time_us"], adapter))
+            return {"mmlu_accuracy": 0.5}
+
+        engine = SessionScheduler(settings, manifest([[(0, 60)], []], ((0, 60),)),
+                                  100, 0.0, train, aggregate, evaluate_periodic=evaluate,
+                                  evaluate=lambda adapter, index: {"mmlu_accuracy": 0.5})
+        full = engine.run()
+        self.assertEqual(observed, [(15, 0.5), (30, 1.0), (45, 1.5)])
+        self.assertEqual([p["time_us"] for p in full["evaluations"]], [15, 30, 45, 60])
+        settings["evaluation"]["interval_seconds"] = None
+        without = SessionScheduler(settings, manifest([[(0, 60)], []], ((0, 60),)),
+                                   100, 0.0, train, aggregate).run()
+        for field in ("adapter", "version", "attempts"):
+            self.assertEqual(full[field], without[field])
+
+    @patch("federated_lora.scheduler.job_durations", return_value=costs())
+    def test_periodic_resume_keeps_pending_jobs_and_evaluation_points(self, _):
+        settings = config()
+        settings["sessions"]["participation"] = "repeated"
+        settings["evaluation"] = {"interval_seconds": 0.000020}
+        schedule = manifest([[(0, 300)], [(0, 300)]], ((0, 60), (200, 260)))
+
+        def engine(state=None):
+            return SessionScheduler(settings, schedule, 100, 0.0, train, aggregate, state=state,
+                                    evaluate=lambda a, i: {"mmlu_accuracy": a},
+                                    evaluate_periodic=lambda a, i, p: {"mmlu_accuracy": a})
+
+        full = engine().run()
+        partial = engine().run(max_events=8)
+        self.assertTrue(partial["jobs"])
+        resumed = engine(copy.deepcopy(partial)).run()
+        self.assertEqual(full, resumed)
+        self.assertEqual(len(full["evaluations"]), 6)
+        self.assertEqual(full["evaluations"][-1]["elapsed_session_seconds"], 0.000120)
+        self.assertGreater(full["summaries"][1]["server_updates"], 0)
+
+    @patch("federated_lora.scheduler.job_durations", return_value=costs())
+    def test_quiet_periodic_points_and_nondivisible_deadline(self, _):
+        settings = config()
+        settings["evaluation"] = {"interval_seconds": 0.000030}
+        state = SessionScheduler(settings, manifest([[], []]), 100, 0.0, train, aggregate).run()
+        self.assertEqual([p["time_us"] for p in state["evaluations"]], [30, 60, 90, 100])
+        self.assertEqual([p["version"] for p in state["evaluations"]], [0] * 4)
+        self.assertEqual(state["evaluations"][-1]["kind"], "deadline")
+
+    @patch("federated_lora.scheduler.job_durations", return_value=costs())
+    def test_repeated_training_stops_when_availability_ends_during_upload(self, _):
+        settings = config()
+        settings["sessions"]["participation"] = "repeated"
+        state = SessionScheduler(settings, manifest([[(0, 29)], []]), 100, 0.0, train, aggregate).run()
+        self.assertEqual(state["version"], 1)
+        self.assertEqual(state["summaries"][0]["trained_jobs"], 2)
+        self.assertEqual(state["summaries"][0]["canceled_jobs"], 1)
+        self.assertEqual(state["adapter"], 0.5)
+
+    @patch("federated_lora.scheduler.job_durations", return_value=costs())
+    def test_periodic_sync_evaluation_uses_global_not_buffered_client_adapter(self, _):
+        settings = config("sync")
+        settings["sessions"]["participation"] = "repeated"
+        settings["evaluation"] = {"interval_seconds": 0.000030}
+        observed = []
+        SessionScheduler(settings, manifest([[(0, 25)], [(50, 90)]]), 100, 0.0, train, aggregate,
+                         evaluate_periodic=lambda a, i, p: observed.append((p["time_us"], a))).run()
+        self.assertEqual(observed, [(30, 0.0), (60, 0.0), (90, 1.0)])
+
 
 class SessionPreparationTests(unittest.TestCase):
     def settings(self):
@@ -203,6 +314,17 @@ class SessionPreparationTests(unittest.TestCase):
         with patch("federated_lora.sessions.load_traces", return_value=traces):
             with self.assertRaisesRegex(ValueError, "does not cover"):
                 prepare_sessions(self.settings(), Path("."))
+
+    def test_always_available_has_full_session_windows_with_same_trace_mapping(self):
+        settings = self.settings()
+        with patch("federated_lora.sessions.load_traces", return_value=self.traces()):
+            trace = prepare_sessions(settings, Path("."))
+            settings["sessions"]["availability"] = "always"
+            always = prepare_sessions(settings, Path("."))
+        self.assertEqual(always["clients"][0]["trace_id"], trace["clients"][0]["trace_id"])
+        self.assertEqual([s["client_available_seconds"] for s in always["sessions"]], [[32400], [32400]])
+        self.assertEqual(always["sessions"][0]["start"], trace["sessions"][0]["start"])
+        self.assertEqual(always["clients"][0]["windows"][-1]["end"], always["sessions"][-1]["deadline"])
 
 
 if __name__ == "__main__":

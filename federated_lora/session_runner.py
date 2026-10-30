@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 
 from .scheduler import SessionScheduler
-from .sessions import prepare_sessions, write_schedule
+from .sessions import prepare_sessions, write_schedule, run_directory
 
 
 def _json(path: Path, data):
@@ -19,18 +19,25 @@ def _json(path: Path, data):
 
 def dry_run(config: dict, root: Path) -> dict:
     """No GPU or model downloads. Placeholder adapters produce scheduling metrics only."""
+    from .data import load_prepared
+
+    clients, _ = load_prepared(config, root)
     manifest = prepare_sessions(config, root)
-    directory = root / config["output_dir"] / "dry-run" / config["federation"]["mode"]
+    directory = run_directory(config, root, dry_run=True)
     write_schedule(manifest, directory)
 
     def train(client, adapter, job):
         return {"adapter": adapter, "example_count": 1}
 
     engine = SessionScheduler(config, manifest, config["timing"]["dry_run_adapter_bytes"],
-                              None, train, lambda current, updates, mode, stale: None)
+                              None, train, lambda current, updates, mode, stale: None,
+                              client_sizes=[len(rows) for rows in clients])
     state = engine.run()
-    report = {"simulation_only": True, "note": "No model trained or evaluated; adapter size is configured estimate",
-              "sessions": state["summaries"]}
+    report = {"simulation_only": True, "availability": manifest["availability"],
+              "participation": manifest["participation"],
+              "note": "No model trained or evaluated; adapter size is configured estimate; epoch sizes use prepared rows before tokenization",
+              "client_example_counts": [len(rows) for rows in clients],
+              "evaluations": state["evaluations"], "sessions": state["summaries"]}
     _json(directory / "summary.json", report)
     (directory / "events.jsonl").write_text("".join(json.dumps(x) + "\n" for x in state["history"]), encoding="utf-8")
     print(json.dumps(report, indent=2))
@@ -45,7 +52,7 @@ def run_sessions(config: dict, root: Path, resume=False) -> dict:
     from .runner import interpolate, weighted_mean
     from .training import adapter_state, encode_rows, load_adapter, load_training_model, train_client
 
-    directory = root / config["output_dir"] / config["federation"]["mode"]
+    directory = run_directory(config, root)
     checkpoint = directory / "checkpoint.pt"
     if checkpoint.exists() != resume:
         raise ValueError("Existing run needs --resume; --resume requires an existing checkpoint")
@@ -63,7 +70,13 @@ def run_sessions(config: dict, root: Path, resume=False) -> dict:
     evaluator = MMLUEvaluator(config["evaluation"], tokenizer, root)
     initial = adapter_state(model)
     adapter_bytes = sum(t.numel() * t.element_size() for t in initial.values())
-    identity = {"config": config, "sessions": manifest, "data": data_manifest,
+    initial_hash = hashlib.sha256()
+    for name, tensor in sorted(initial.items()):
+        initial_hash.update(name.encode())
+        initial_hash.update(tensor.numpy().tobytes())
+    identity = {"scheduler_format_version": 2, "config": config, "sessions": manifest, "data": data_manifest,
+                "encoded_client_example_counts": [len(rows) for rows in encoded],
+                "initial_adapter_sha256": initial_hash.hexdigest(),
                 "client_content_sha256": client_hash, "evaluation": evaluator.manifest,
                 "adapter_bytes": adapter_bytes}
     fingerprint = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
@@ -74,9 +87,12 @@ def run_sessions(config: dict, root: Path, resume=False) -> dict:
     write_schedule(manifest, directory)
     _json(directory / "run_manifest.json", identity)
 
-    def evaluate(adapter, index):
+    def evaluate(adapter, index, point=None):
         load_adapter(model, adapter)
         label = "initial" if index < 0 else f"session-{index + 1:02d}"
+        if point is not None:
+            # Timestamp labels are exact and stable across save/resume.
+            label += f"-at-{point['time_us']:016d}us"
         adapter_path = directory / f"{label}-adapter.pt"
         temporary = adapter_path.with_suffix(".pt.tmp")
         torch.save(adapter, temporary)
@@ -113,12 +129,16 @@ def run_sessions(config: dict, root: Path, resume=False) -> dict:
         os.replace(temporary, directory / "events.jsonl")
 
     engine = SessionScheduler(config, manifest, adapter_bytes, initial, train, aggregate,
-                              evaluate=evaluate, save=save, state=saved["state"] if saved else None)
+                              evaluate=evaluate, evaluate_periodic=evaluate,
+                              save=save, state=saved["state"] if saved else None,
+                              client_sizes=[len(rows) for rows in encoded])
     if not resume:
         save(engine.state)
     state = engine.run()
     torch.save(state["adapter"], directory / "adapter.pt")
     report = {"mode": config["federation"]["mode"], "version": state["version"],
+              "availability": manifest["availability"], "participation": manifest["participation"],
+              "completed": state["finished"], "evaluations": state["evaluations"],
               "scope": evaluator.manifest["scope"], "initial_evaluation": initial_evaluation,
               "sessions": state["summaries"], "gpu": torch.cuda.get_device_name(0)}
     previous = initial_evaluation["mmlu_accuracy"]

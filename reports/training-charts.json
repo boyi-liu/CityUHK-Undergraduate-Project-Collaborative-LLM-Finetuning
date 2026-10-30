@@ -1,0 +1,216 @@
+{
+  "checked_on": "2026-10-30",
+  "dataset": "grouped MMLU",
+  "local_isolated_tests_passed": 92,
+  "server_tests_passed": 92,
+  "gpu": "Tesla V100 32GB",
+  "training_examples_assigned": 120,
+  "clients": 5,
+  "test_questions": 12,
+  "n_shot": 0,
+  "scope": "debug_subset",
+  "session_start": "2020-01-30T06:30:00",
+  "session_deadline": "2020-01-30T06:31:00",
+  "evaluation_interval_seconds": 30,
+  "time_basis": "recorded_local (timezone unverified)",
+  "all_source_hashes_match": true,
+  "final_completed_resume_predictions_unchanged": true,
+  "source_sha256": {
+    "async_schedule.py": "f40ab5183f66e8bc92598ffc41fea7c9e427c022ca4c22a69190fd97495b2a7e",
+    "mmlu_runtime.py": "c3e2eb73717ddad949975e09b4bb826cdfcab06b7935c97221a880c4d7a30300",
+    "baseline_audit.py": "9d337463b4451cdc4389850b0754c66094a38e313f239fd4d80cdbd149571463",
+    "traces.py": "d78b268fa76f1661d33e888899d6bec6f24301286ecdf8d3330a31da25e0fb80",
+    "trace_plotting.py": "3f2feda5c13ea1ece3a3527e23f8b5633143d5279e277aa235296a5a87229596",
+    "data.py": "0d07dfe223a2470cf6176b3aa69d3a42cd42a4af4533e6997218f3e1a067aaa8",
+    "mmlu_config.py": "fd7457fd70ac8ceda1e013b1cacf77542a5a5dbe9fb89ac496d5c30d138172c1",
+    "mmlu_runner.py": "e1362c170ac3f428d9b84aa6f7c6f0de1155f08aaed660ecdba906114fe65af0",
+    "sessions.py": "f5650a7afdd1226dd3e77d8341a9a9c82473656364a55144434a47fec0efcf3c",
+    "__main__.py": "d21ec69c8a250af7c52934a84dbd2029c1bc6f9eaf4be106d28b750599af3f11",
+    "round_selection.py": "720dec6e4f0d076d036c344c6e0bd189a22d3a6f846f9b9332a98641b579d4d5",
+    "trace_audit.py": "cab473cc17d2b22a21ea5deb528633a3327f47b7b2517a7cee178966c2b0c465",
+    "runner.py": "04c6412b1f1c357117197b0e31b5410c1aa61aa858a5b6a217fc498580806034",
+    "session_runner.py": "d4db2da1d520a839f3a6cb30f3f53931444c7612be4e62a5b9b8a73d2b392d92",
+    "baseline_runtime.py": "8128ce10ecb759e2420eddac716ab1c9341ea314fecd025c8e27ec96b3eaae16",
+    "config.py": "80aa2f3a599c40b1dd8ed81bbbb5ccc15a681453a50c93d2ee2ffcd6ab5e3e88",
+    "batching.py": "8173333dafd3c9ce929f8bb83d89e9c2a93e866b548cca150f22b32565436f83",
+    "comparison.py": "c8ce16ed19596dbef39b5194b3232634ced57740a92f9dbd879487b3488ab643",
+    "fedasync_runner.py": "add8e38a394df143159b3a21bd173dd88fec0e25945e1da2c60f4c9a004387d5",
+    "plotting.py": "e67a934780e8f90dc94b57b0ef93093a916a44fb33fb0b1776aedeb054dd1efb",
+    "baselines.py": "6b17c762be58336294a438cad6aeca9fd4a58c828ceb248a69e143b0b48f6893",
+    "fedasync_runtime.py": "41fe0fa461627505e4a707e2c7bee19c183f9d7ecf26f61fe3281eb5aa70a584",
+    "mmlu_data.py": "5169b0b113fc02f792f468fdf753b78366e3374c52c8c2d4f0241ea5e1f79a81",
+    "fedasync_audit.py": "9c3bc702bd56fda14e082052a55ceac024340b7c2e6bcdde6f9b5cadfb81d3cd",
+    "scheduler.py": "26e129796766f0abf89635893ee3f6bb27366f9555d34e9e2049647402cc7921",
+    "__init__.py": "f5aed19f39f2a860b4d52a8d1421c7da0cf6f9a172ec4152e4fe104f050322cb",
+    "fedasync.py": "f7fe215477a2e622715cd0f149321994847aca036ae4d089fcab7a8f9ee87a0c",
+    "trace_baselines.py": "0b66dacabc7e0a839bb4e0e85b4db2c404c4c91cbf8b7d7b1e2eea2a052f31b2",
+    "evaluation.py": "af8e5e747e603861759499edf2925ce58fe341a216b7fa38fcfda8b46dded922",
+    "timing.py": "d177ba7091a43d1a5525a87f4f216c5c331d1122373b772bc96d268369fab3f8",
+    "training.py": "0752361e99a184aea013502a63a7c11d79f649b18d990475b04b7af6129589f9",
+    "trace_comparison.py": "16316b3c45d0c9c5df6da351cbecd821e53939a57c376ca4b24f2620909957fe"
+  },
+  "gpu_checks": {
+    "fedit": {
+      "complete": true,
+      "conditions": {
+        "always": {
+          "version": 1,
+          "audit": {
+            "algorithm": "fedit",
+            "accepted_versions_replayed": [
+              1
+            ],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        },
+        "trace": {
+          "version": 0,
+          "audit": {
+            "algorithm": "fedit",
+            "accepted_versions_replayed": [],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        }
+      }
+    },
+    "ffa-lora": {
+      "complete": true,
+      "conditions": {
+        "always": {
+          "version": 1,
+          "audit": {
+            "algorithm": "ffa_lora",
+            "accepted_versions_replayed": [
+              1
+            ],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        },
+        "trace": {
+          "version": 0,
+          "audit": {
+            "algorithm": "ffa_lora",
+            "accepted_versions_replayed": [],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        }
+      }
+    },
+    "flora": {
+      "complete": true,
+      "conditions": {
+        "always": {
+          "version": 1,
+          "audit": {
+            "algorithm": "flora",
+            "accepted_versions_replayed": [
+              1
+            ],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        },
+        "trace": {
+          "version": 0,
+          "audit": {
+            "algorithm": "flora",
+            "accepted_versions_replayed": [],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        }
+      }
+    },
+    "fedasync-lora": {
+      "complete": true,
+      "conditions": {
+        "always": {
+          "version": 5,
+          "audit": {
+            "algorithm": "fedasync_lora",
+            "accepted_versions_replayed": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        },
+        "trace": {
+          "version": 2,
+          "audit": {
+            "algorithm": "fedasync_lora",
+            "accepted_versions_replayed": [
+              1,
+              2
+            ],
+            "recorded_availability_checked": true,
+            "late_uploads_excluded": true,
+            "all_deadline_states_verified": true,
+            "frozen_base_verified": true,
+            "fresh_final_export_predictions_and_scores_match": true,
+            "completed_resume_repeated_no_events": true,
+            "test_used_for_checkpoint_selection": false,
+            "independent_final_test": false
+          }
+        }
+      }
+    }
+  },
+  "limitations": [
+    "GPU tests use a small subset, not the full paired experiment.",
+    "Each algorithm retains its own baseline schedule.",
+    "Device step times are inherited estimates.",
+    "Accuracy serves reporting, not model selection."
+  ],
+  "artifact_archive_sha256": "4869850bcfefb61a0c9ade4aa7018dffb30065e6907514761eca772fbae1ef7a"
+}

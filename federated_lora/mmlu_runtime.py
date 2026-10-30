@@ -185,6 +185,9 @@ class MMLURuntime:
                   "start_adapter_sha256": start_hash, "batches": events}
         return self.state(), result
 
+    def prediction_name(self, number):
+        return f"round-{number}-predictions.jsonl"
+
     @torch.inference_mode()
     def evaluate(self, adapter, round_number):
         self.restore(adapter)
@@ -220,7 +223,7 @@ class MMLURuntime:
                                     "prediction": prediction, "scores": scores, "answer_nll": nll})
         predictions.sort(key=lambda r: r["index"])
         count, correct = len(predictions), sum(r["correct"] for r in totals.values())
-        path = self.directory / f"round-{round_number}-predictions.jsonl"
+        path = self.directory / self.prediction_name(round_number)
         path.write_text("".join(json.dumps(row) + "\n" for row in predictions), encoding="utf-8")
         return {"round": round_number, "correct": correct, "count": count, "accuracy": correct / count,
                 "answer_nll": nll_sum / count, "per_subject": dict(sorted(totals.items())),

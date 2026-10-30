@@ -1,0 +1,827 @@
+{
+  "checked_at_utc": "2026-10-29T13:52:59.479579+00:00",
+  "published_sync_baseline_commit": "888ae61fd3123d8e7558a95dd15f33ecab0b6d49",
+  "fedasync_changes_committed": false,
+  "local_tests_passed": 80,
+  "isolated_tests_passed": 54,
+  "server_fedasync_tests_passed": 9,
+  "paper": "https://arxiv.org/abs/1903.03934v5",
+  "reference_commit": "912ecf33e0fb811ac8551c4f3cdab344cdedfb53",
+  "adaptation": "FedAsync on concatenated LoRA A/B parameters; local proximal SGD; shared mixing coefficient",
+  "independent_final_test": false,
+  "selection_split": "test",
+  "n_shot": 0,
+  "full_50_update_experiment_run": false,
+  "data": {
+    "format_version": 1,
+    "dataset": "cais/mmlu",
+    "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+    "source_sha256": "ab26a576ce31080792f638b7954585fe140e437b45e804cc640fabc5779c5e19",
+    "subject_groups_sha256": "58f4f1b33a6c2908f3b6eba218a4d46f6e16f023cd6822d87fab656907249852",
+    "seed": 42,
+    "alpha": 0.5,
+    "maximum_examples": null,
+    "training_count": 1780,
+    "client_counts": [
+      488,
+      304,
+      247,
+      232,
+      509
+    ],
+    "client_sha256": [
+      "18dcfa522a4e3a3f7cb42d3e30f00de3e4ff7dee6804c2d4b5a6a0ab3a321e6d",
+      "5556cc735f285e075fa72ce8b1c8ee2d037106503c96507f605385c9e7b9cf37",
+      "4b00270a9df579f3794957764df258938538a315afc5be6ff91012585e242bd6",
+      "c6de6d44865f1b66658af75312ddc4a7c04ca8be0082d131cd6d59ca4ad786f8",
+      "e03bc379bf8ca2b8f522b2f02546a90faa36708be87586d09500919f2cb7be72"
+    ],
+    "client_groups": [
+      {
+        "Medicine and health": 47,
+        "Natural sciences": 8,
+        "Computing and engineering": 3,
+        "History, law and philosophy": 409,
+        "Business and economics": 7,
+        "Social sciences": 9,
+        "General knowledge": 5
+      },
+      {
+        "Mathematics": 87,
+        "Natural sciences": 44,
+        "Business and economics": 34,
+        "Computing and engineering": 34,
+        "General knowledge": 4,
+        "Social sciences": 60,
+        "History, law and philosophy": 31,
+        "Medicine and health": 10
+      },
+      {
+        "Natural sciences": 25,
+        "Business and economics": 70,
+        "Computing and engineering": 17,
+        "History, law and philosophy": 44,
+        "General knowledge": 15,
+        "Social sciences": 68,
+        "Medicine and health": 4,
+        "Mathematics": 4
+      },
+      {
+        "Medicine and health": 33,
+        "Business and economics": 66,
+        "Computing and engineering": 12,
+        "Mathematics": 42,
+        "Natural sciences": 4,
+        "General knowledge": 34,
+        "History, law and philosophy": 40,
+        "Social sciences": 1
+      },
+      {
+        "Medicine and health": 123,
+        "Natural sciences": 99,
+        "Business and economics": 17,
+        "Computing and engineering": 17,
+        "Mathematics": 7,
+        "History, law and philosophy": 59,
+        "General knowledge": 47,
+        "Social sciences": 140
+      }
+    ]
+  },
+  "source_sha256": {
+    "fedasync.py": "f7fe215477a2e622715cd0f149321994847aca036ae4d089fcab7a8f9ee87a0c",
+    "fedasync_runner.py": "add8e38a394df143159b3a21bd173dd88fec0e25945e1da2c60f4c9a004387d5",
+    "fedasync_runtime.py": "ec81d38eea6435f3c69f380e57fa9bb29cc067f7dc4b4f3e7acfd88688d5b436",
+    "fedasync_audit.py": "9c3bc702bd56fda14e082052a55ceac024340b7c2e6bcdde6f9b5cadfb81d3cd",
+    "async_schedule.py": "f40ab5183f66e8bc92598ffc41fea7c9e427c022ca4c22a69190fd97495b2a7e",
+    "mmlu_config.py": "3dffc13cc6cc349a704c1d390b7a624c3539f01eec7e9a47555427d79b911e27",
+    "mmlu_runner.py": "5449a9f421942de3c9d2acc2944685689014ec63f96000ac0d68405896f25921",
+    "mmlu_runtime.py": "c3e2eb73717ddad949975e09b4bb826cdfcab06b7935c97221a880c4d7a30300",
+    "mmlu_data.py": "5169b0b113fc02f792f468fdf753b78366e3374c52c8c2d4f0241ea5e1f79a81"
+  },
+  "source_bundle_sha256": "45400a61654eb96fc1273f8d42bca506a2dc36f80212883b39c277e852073364",
+  "runs": {
+    "uniform_staleness": {
+      "configuration": {
+        "seed": 42,
+        "data": {
+          "dataset": "mmlu",
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "training_path": "dataset/mmlu_train.jsonl",
+          "manifest_path": "dataset/mmlu_train.manifest.json",
+          "subject_groups_path": "dataset/mmlu_subject_groups.json",
+          "output_dir": "dataset/mmlu_client_splits_full",
+          "max_examples": null,
+          "dirichlet_alpha": 0.5
+        },
+        "model": {
+          "name": "Qwen/Qwen2.5-0.5B",
+          "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+          "max_length": 128,
+          "lora_rank": 8,
+          "lora_alpha": 32,
+          "lora_dropout": 0.1,
+          "target_modules": [
+            "q_proj",
+            "v_proj"
+          ]
+        },
+        "training": {
+          "local_epochs": 1,
+          "micro_batch_size": 8,
+          "grad_accum": 1,
+          "learning_rate": 0.0002,
+          "optimizer": "SGD",
+          "weight_decay": 0,
+          "proximal_rho": 0.005
+        },
+        "federation": {
+          "algorithm": "fedasync_lora",
+          "mode": "async",
+          "client_count": 5,
+          "max_updates": 5,
+          "mixing_alpha": 0.6,
+          "staleness": {
+            "function": "polynomial",
+            "a": 0.5
+          },
+          "simulation": {
+            "schedule": "uniform_staleness",
+            "max_staleness": 4
+          }
+        },
+        "evaluation": {
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "cache_dir": "dataset/mmlu_raw",
+          "n_shot": 0,
+          "max_length": 4096,
+          "max_samples": null,
+          "subset_seed": 42
+        },
+        "stopping": {
+          "rule": "first_accuracy_drop",
+          "split": "test",
+          "include_initial": true
+        },
+        "output_dir": "exp/fedasync-lora-mmlu-pilot"
+      },
+      "baseline_accuracy": 0.4677396382281726,
+      "selected_update": 2,
+      "selected_correct": 6583,
+      "selected_accuracy": 0.468807862127902,
+      "stopped_update": 3,
+      "stop_reason": "first_accuracy_drop",
+      "scope": "full_mmlu",
+      "best_adapter_sha256": "a8ece7484e64d84d015438a4f0ababc67fd08c93b37f0b656d8507a1f737ab26",
+      "trainable_parameters": 540672,
+      "initial_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d",
+      "evaluation_prompts_sha256": "e8d1dbd088822966bfdb0452afe523a209fe01d763c2bb604f11e53dfcaf876a",
+      "jobs_per_client": {
+        "0": 1,
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 0
+      },
+      "successful_optimizer_steps": 137,
+      "skipped_optimizer_steps": 0,
+      "no_target_batches": 0,
+      "local_training_seconds": 15.74387314915657,
+      "evaluation_seconds": 280.5955537557602,
+      "pending_jobs_not_applied": 0,
+      "local_training_loss_by_job": [
+        {
+          "job_id": 0,
+          "client": 0,
+          "training_loss": 1.186186250236288,
+          "objective_loss": 1.1861874647941943,
+          "max_proximal_penalty": 2.2458350485976553e-06
+        },
+        {
+          "job_id": 1,
+          "client": 1,
+          "training_loss": 1.1771007851912425,
+          "objective_loss": 1.1771011494673216,
+          "max_proximal_penalty": 1.1050411785618053e-06
+        },
+        {
+          "job_id": 2,
+          "client": 1,
+          "training_loss": 1.155700262922507,
+          "objective_loss": 1.1557005797441189,
+          "max_proximal_penalty": 7.357588742706866e-07
+        }
+      ],
+      "update_history": [
+        {
+          "update": 0,
+          "correct": 6568,
+          "count": 14042,
+          "accuracy": 0.4677396382281726,
+          "answer_nll": 1.2127414318614687,
+          "seconds": 70.17488165199757
+        },
+        {
+          "update": 1,
+          "client": 0,
+          "job_id": 0,
+          "downloaded_version": 0,
+          "staleness": 0,
+          "staleness_weight": 1.0,
+          "mixing_coefficient": 0.6,
+          "correct": 6568,
+          "count": 14042,
+          "accuracy": 0.4677396382281726,
+          "answer_nll": 1.2005983947668912,
+          "training_loss": 1.186186250236288,
+          "successful_steps": 61,
+          "decreased_from_previous": false,
+          "selected_update": 0,
+          "seconds": 70.14925172924995,
+          "dispatched_at_us": 0,
+          "arrives_at_us": null,
+          "global_adapter_sha256": "94aced3025c5520b8c85c782832dd19ed2c5044eeee669d647d74f0ad98bf8d1",
+          "downloaded_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d"
+        },
+        {
+          "update": 2,
+          "client": 1,
+          "job_id": 1,
+          "downloaded_version": 0,
+          "staleness": 1,
+          "staleness_weight": 0.7071067811865476,
+          "mixing_coefficient": 0.4242640687119285,
+          "correct": 6583,
+          "count": 14042,
+          "accuracy": 0.468807862127902,
+          "answer_nll": 1.1979636941692344,
+          "training_loss": 1.1771007851912425,
+          "successful_steps": 38,
+          "decreased_from_previous": false,
+          "selected_update": 2,
+          "seconds": 70.11750975251198,
+          "dispatched_at_us": 0,
+          "arrives_at_us": null,
+          "global_adapter_sha256": "a8ece7484e64d84d015438a4f0ababc67fd08c93b37f0b656d8507a1f737ab26",
+          "downloaded_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d"
+        },
+        {
+          "update": 3,
+          "client": 1,
+          "job_id": 2,
+          "downloaded_version": 2,
+          "staleness": 0,
+          "staleness_weight": 1.0,
+          "mixing_coefficient": 0.6,
+          "correct": 6572,
+          "count": 14042,
+          "accuracy": 0.46802449793476714,
+          "answer_nll": 1.1914457365020914,
+          "training_loss": 1.155700262922507,
+          "successful_steps": 38,
+          "decreased_from_previous": true,
+          "selected_update": 2,
+          "seconds": 70.1539106220007,
+          "dispatched_at_us": 0,
+          "arrives_at_us": null,
+          "global_adapter_sha256": "db6735c796876f25d01a5aa4222af213efad33bc43ec8874b36eb0998979e02f",
+          "downloaded_adapter_sha256": "a8ece7484e64d84d015438a4f0ababc67fd08c93b37f0b656d8507a1f737ab26"
+        }
+      ],
+      "audit": {
+        "algorithm": "fedasync_lora",
+        "updates": [
+          {
+            "update": 1,
+            "client": 0,
+            "downloaded_version": 0,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 2.2458350485976553e-06
+          },
+          {
+            "update": 2,
+            "client": 1,
+            "downloaded_version": 0,
+            "staleness": 1,
+            "coefficient": 0.4242640687119285,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 1.1050411785618053e-06
+          },
+          {
+            "update": 3,
+            "client": 1,
+            "downloaded_version": 2,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 7.357588742706866e-07
+          }
+        ],
+        "frozen_base_verified": true,
+        "positive_local_proximal_penalty_observed": true,
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_updates": true,
+        "selected_update": 2,
+        "selected_correct": 6583,
+        "count": 14042,
+        "scope": "full_mmlu",
+        "independent_final_test": false
+      }
+    },
+    "arrivals": {
+      "configuration": {
+        "seed": 42,
+        "data": {
+          "dataset": "mmlu",
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "training_path": "dataset/mmlu_train.jsonl",
+          "manifest_path": "dataset/mmlu_train.manifest.json",
+          "subject_groups_path": "dataset/mmlu_subject_groups.json",
+          "output_dir": "dataset/mmlu_client_splits_full",
+          "max_examples": null,
+          "dirichlet_alpha": 0.5
+        },
+        "model": {
+          "name": "Qwen/Qwen2.5-0.5B",
+          "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+          "max_length": 128,
+          "lora_rank": 8,
+          "lora_alpha": 32,
+          "lora_dropout": 0.1,
+          "target_modules": [
+            "q_proj",
+            "v_proj"
+          ]
+        },
+        "training": {
+          "local_epochs": 1,
+          "micro_batch_size": 8,
+          "grad_accum": 1,
+          "learning_rate": 0.0002,
+          "optimizer": "SGD",
+          "weight_decay": 0,
+          "proximal_rho": 0.005
+        },
+        "federation": {
+          "algorithm": "fedasync_lora",
+          "mode": "async",
+          "client_count": 5,
+          "max_updates": 5,
+          "mixing_alpha": 0.6,
+          "staleness": {
+            "function": "polynomial",
+            "a": 0.5
+          },
+          "simulation": {
+            "schedule": "arrivals",
+            "client_job_seconds": [
+              1.0,
+              1.5,
+              2.0,
+              2.5,
+              3.0
+            ]
+          }
+        },
+        "evaluation": {
+          "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+          "cache_dir": "dataset/mmlu_raw",
+          "n_shot": 0,
+          "max_length": 4096,
+          "max_samples": null,
+          "subset_seed": 42
+        },
+        "stopping": {
+          "rule": "first_accuracy_drop",
+          "split": "test",
+          "include_initial": true
+        },
+        "output_dir": "exp/fedasync-lora-mmlu-pilot-arrivals"
+      },
+      "baseline_accuracy": 0.4677396382281726,
+      "selected_update": 3,
+      "selected_correct": 6585,
+      "selected_accuracy": 0.46895029198119925,
+      "stopped_update": 4,
+      "stop_reason": "first_accuracy_drop",
+      "scope": "full_mmlu",
+      "best_adapter_sha256": "14098122c58bd9d084c1da93541d4ad3952d4960f1759d7fb2216627d0632086",
+      "trainable_parameters": 540672,
+      "initial_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d",
+      "evaluation_prompts_sha256": "e8d1dbd088822966bfdb0452afe523a209fe01d763c2bb604f11e53dfcaf876a",
+      "jobs_per_client": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 0,
+        "4": 0
+      },
+      "successful_optimizer_steps": 190,
+      "skipped_optimizer_steps": 0,
+      "no_target_batches": 1,
+      "local_training_seconds": 19.688182398676872,
+      "evaluation_seconds": 300.0315950512886,
+      "pending_jobs_not_applied": 5,
+      "local_training_loss_by_job": [
+        {
+          "job_id": 0,
+          "client": 0,
+          "training_loss": 1.186186250236288,
+          "objective_loss": 1.1861874647941943,
+          "max_proximal_penalty": 2.2458350485976553e-06
+        },
+        {
+          "job_id": 1,
+          "client": 1,
+          "training_loss": 1.1771007851912425,
+          "objective_loss": 1.1771011494673216,
+          "max_proximal_penalty": 1.1050411785618053e-06
+        },
+        {
+          "job_id": 2,
+          "client": 2,
+          "training_loss": 1.118137810890581,
+          "objective_loss": 1.1181380810106503,
+          "max_proximal_penalty": 6.362921567415469e-07
+        },
+        {
+          "job_id": 5,
+          "client": 0,
+          "training_loss": 1.1573489779556119,
+          "objective_loss": 1.1573496565625474,
+          "max_proximal_penalty": 1.3561906371251098e-06
+        }
+      ],
+      "update_history": [
+        {
+          "update": 0,
+          "correct": 6568,
+          "count": 14042,
+          "accuracy": 0.4677396382281726,
+          "answer_nll": 1.2127414318614687,
+          "seconds": 59.88755340874195
+        },
+        {
+          "update": 1,
+          "client": 0,
+          "job_id": 0,
+          "downloaded_version": 0,
+          "staleness": 0,
+          "staleness_weight": 1.0,
+          "mixing_coefficient": 0.6,
+          "correct": 6568,
+          "count": 14042,
+          "accuracy": 0.4677396382281726,
+          "answer_nll": 1.2005983947668912,
+          "training_loss": 1.186186250236288,
+          "successful_steps": 61,
+          "decreased_from_previous": false,
+          "selected_update": 0,
+          "seconds": 59.924125984311104,
+          "dispatched_at_us": 0,
+          "arrives_at_us": 1000000,
+          "global_adapter_sha256": "94aced3025c5520b8c85c782832dd19ed2c5044eeee669d647d74f0ad98bf8d1",
+          "downloaded_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d"
+        },
+        {
+          "update": 2,
+          "client": 1,
+          "job_id": 1,
+          "downloaded_version": 0,
+          "staleness": 1,
+          "staleness_weight": 0.7071067811865476,
+          "mixing_coefficient": 0.4242640687119285,
+          "correct": 6583,
+          "count": 14042,
+          "accuracy": 0.468807862127902,
+          "answer_nll": 1.1979636941692344,
+          "training_loss": 1.1771007851912425,
+          "successful_steps": 38,
+          "decreased_from_previous": false,
+          "selected_update": 2,
+          "seconds": 60.06360866129398,
+          "dispatched_at_us": 0,
+          "arrives_at_us": 1500000,
+          "global_adapter_sha256": "a8ece7484e64d84d015438a4f0ababc67fd08c93b37f0b656d8507a1f737ab26",
+          "downloaded_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d"
+        },
+        {
+          "update": 3,
+          "client": 2,
+          "job_id": 2,
+          "downloaded_version": 0,
+          "staleness": 2,
+          "staleness_weight": 0.5773502691896257,
+          "mixing_coefficient": 0.3464101615137754,
+          "correct": 6585,
+          "count": 14042,
+          "accuracy": 0.46895029198119925,
+          "answer_nll": 1.1988488576665481,
+          "training_loss": 1.118137810890581,
+          "successful_steps": 31,
+          "decreased_from_previous": false,
+          "selected_update": 3,
+          "seconds": 60.12987653911114,
+          "dispatched_at_us": 0,
+          "arrives_at_us": 2000000,
+          "global_adapter_sha256": "14098122c58bd9d084c1da93541d4ad3952d4960f1759d7fb2216627d0632086",
+          "downloaded_adapter_sha256": "4f4b3a6a831874043c565e0886763a090f32b20b63f0a8721fc21dc62ee0a22d"
+        },
+        {
+          "update": 4,
+          "client": 0,
+          "job_id": 5,
+          "downloaded_version": 1,
+          "staleness": 2,
+          "staleness_weight": 0.5773502691896257,
+          "mixing_coefficient": 0.3464101615137754,
+          "correct": 6579,
+          "count": 14042,
+          "accuracy": 0.4685230024213075,
+          "answer_nll": 1.1962325497613064,
+          "training_loss": 1.1573489779556119,
+          "successful_steps": 60,
+          "decreased_from_previous": true,
+          "selected_update": 3,
+          "seconds": 60.02643045783043,
+          "dispatched_at_us": 1000000,
+          "arrives_at_us": 2000000,
+          "global_adapter_sha256": "896f2d4e6d1d3653312346199094a8ed4e3d2302995e9d6fe55a15c4ac3dbd9d",
+          "downloaded_adapter_sha256": "94aced3025c5520b8c85c782832dd19ed2c5044eeee669d647d74f0ad98bf8d1"
+        }
+      ],
+      "audit": {
+        "algorithm": "fedasync_lora",
+        "updates": [
+          {
+            "update": 1,
+            "client": 0,
+            "downloaded_version": 0,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 2.2458350485976553e-06
+          },
+          {
+            "update": 2,
+            "client": 1,
+            "downloaded_version": 0,
+            "staleness": 1,
+            "coefficient": 0.4242640687119285,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 1.1050411785618053e-06
+          },
+          {
+            "update": 3,
+            "client": 2,
+            "downloaded_version": 0,
+            "staleness": 2,
+            "coefficient": 0.3464101615137754,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 6.362921567415469e-07
+          },
+          {
+            "update": 4,
+            "client": 0,
+            "downloaded_version": 1,
+            "staleness": 2,
+            "coefficient": 0.3464101615137754,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 1.3561906371251098e-06
+          }
+        ],
+        "frozen_base_verified": true,
+        "positive_local_proximal_penalty_observed": true,
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_updates": true,
+        "selected_update": 3,
+        "selected_correct": 6585,
+        "count": 14042,
+        "scope": "full_mmlu",
+        "independent_final_test": false
+      }
+    }
+  },
+  "smoke_checks": {
+    "fedasync-lora-mmlu-smoke": {
+      "stopped_update": 10,
+      "selected_update": 0,
+      "scope": "debug_subset",
+      "audit": {
+        "algorithm": "fedasync_lora",
+        "updates": [
+          {
+            "update": 1,
+            "client": 0,
+            "downloaded_version": 0,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 3.2016757245401095e-08
+          },
+          {
+            "update": 2,
+            "client": 1,
+            "downloaded_version": 0,
+            "staleness": 1,
+            "coefficient": 0.4242640687119285,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 6.858645207330483e-08
+          },
+          {
+            "update": 3,
+            "client": 1,
+            "downloaded_version": 2,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 4.825909272199169e-08
+          },
+          {
+            "update": 4,
+            "client": 4,
+            "downloaded_version": 3,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 1.0352390233947517e-07
+          },
+          {
+            "update": 5,
+            "client": 4,
+            "downloaded_version": 4,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 8.268543894018876e-08
+          },
+          {
+            "update": 6,
+            "client": 0,
+            "downloaded_version": 2,
+            "staleness": 3,
+            "coefficient": 0.3,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 2.7860266982315807e-08
+          },
+          {
+            "update": 7,
+            "client": 0,
+            "downloaded_version": 6,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 3.063549058879289e-08
+          },
+          {
+            "update": 8,
+            "client": 1,
+            "downloaded_version": 6,
+            "staleness": 1,
+            "coefficient": 0.4242640687119285,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 4.3263238325153e-08
+          },
+          {
+            "update": 9,
+            "client": 4,
+            "downloaded_version": 4,
+            "staleness": 4,
+            "coefficient": 0.2683281572999747,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 6.367417171304623e-08
+          },
+          {
+            "update": 10,
+            "client": 4,
+            "downloaded_version": 9,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 6.724638268451599e-08
+          }
+        ],
+        "frozen_base_verified": true,
+        "positive_local_proximal_penalty_observed": true,
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_updates": true,
+        "selected_update": 0,
+        "selected_correct": 6,
+        "count": 12,
+        "scope": "debug_subset",
+        "independent_final_test": false
+      }
+    },
+    "fedasync-lora-mmlu-smoke-arrivals": {
+      "stopped_update": 10,
+      "selected_update": 0,
+      "scope": "debug_subset",
+      "audit": {
+        "algorithm": "fedasync_lora",
+        "updates": [
+          {
+            "update": 1,
+            "client": 0,
+            "downloaded_version": 0,
+            "staleness": 0,
+            "coefficient": 0.6,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 3.2016757245401095e-08
+          },
+          {
+            "update": 2,
+            "client": 1,
+            "downloaded_version": 0,
+            "staleness": 1,
+            "coefficient": 0.4242640687119285,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 6.858645207330483e-08
+          },
+          {
+            "update": 3,
+            "client": 2,
+            "downloaded_version": 0,
+            "staleness": 2,
+            "coefficient": 0.3464101615137754,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 1.3618969951778581e-08
+          },
+          {
+            "update": 4,
+            "client": 0,
+            "downloaded_version": 1,
+            "staleness": 2,
+            "coefficient": 0.3464101615137754,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 2.7357408782791026e-08
+          },
+          {
+            "update": 5,
+            "client": 3,
+            "downloaded_version": 0,
+            "staleness": 4,
+            "coefficient": 0.2683281572999747,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 6.164594168467374e-08
+          },
+          {
+            "update": 6,
+            "client": 4,
+            "downloaded_version": 0,
+            "staleness": 5,
+            "coefficient": 0.2449489742783178,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 8.842448551149573e-08
+          },
+          {
+            "update": 7,
+            "client": 1,
+            "downloaded_version": 2,
+            "staleness": 4,
+            "coefficient": 0.2683281572999747,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 4.605747605523902e-08
+          },
+          {
+            "update": 8,
+            "client": 0,
+            "downloaded_version": 4,
+            "staleness": 3,
+            "coefficient": 0.3,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 2.9809658741442036e-08
+          },
+          {
+            "update": 9,
+            "client": 2,
+            "downloaded_version": 3,
+            "staleness": 5,
+            "coefficient": 0.2449489742783178,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 9.693306601832319e-09
+          },
+          {
+            "update": 10,
+            "client": 0,
+            "downloaded_version": 8,
+            "staleness": 1,
+            "coefficient": 0.4242640687119285,
+            "exact_factor_replay": true,
+            "max_proximal_penalty": 3.275912519029589e-08
+          }
+        ],
+        "frozen_base_verified": true,
+        "positive_local_proximal_penalty_observed": true,
+        "fresh_export_predictions_and_scores_match": true,
+        "completed_resume_repeated_no_updates": true,
+        "selected_update": 0,
+        "selected_correct": 6,
+        "count": 12,
+        "scope": "debug_subset",
+        "independent_final_test": false
+      }
+    }
+  }
+}

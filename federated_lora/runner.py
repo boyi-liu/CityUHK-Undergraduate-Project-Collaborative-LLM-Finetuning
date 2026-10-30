@@ -14,6 +14,7 @@ import yaml
 
 from .data import load_prepared
 from .training import adapter_state, encode_rows, load_adapter, load_training_model, train_client
+from .batching import optimizer_steps
 
 
 def weighted_mean(updates: list[dict]) -> dict[str, torch.Tensor]:
@@ -113,6 +114,7 @@ def run(config: dict, root: Path, resume: bool = False) -> dict:
             "base_version": base_version,
             "adapter": trained,
             "example_count": len(clients[client_id]),
+            "optimizer_steps": optimizer_steps(len(encoded_clients[client_id]), config["training"]),
             "train_loss": loss,
             "real_train_seconds": seconds,
         }

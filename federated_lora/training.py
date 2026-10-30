@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-import random
 import time
 from contextlib import nullcontext
 
 import torch
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from .batching import epoch_batches
 
 
 def load_training_model(config: dict):
@@ -96,33 +97,32 @@ def train_client(model, encoded: list[dict], config: dict, device: torch.device,
     torch.manual_seed(config["seed"] + job_id * 1009 + client_id)
     if device.type == "cuda":
         torch.cuda.manual_seed_all(config["seed"] + job_id * 1009 + client_id)
-    rng = random.Random(config["seed"] + job_id * 1009 + client_id)
-    order = list(range(len(encoded)))
-    rng.shuffle(order)
-    cursor = 0
     optimizer = torch.optim.AdamW((p for p in model.parameters() if p.requires_grad),
                                   lr=settings["learning_rate"])
     scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
     model.train()
-    losses = []
+    loss_sum, token_total = 0.0, 0
     started = time.perf_counter()
     optimizer.zero_grad(set_to_none=True)
-    for _ in range(settings["local_steps"]):
-        for _ in range(settings["grad_accum"]):
-            selected = []
-            for _ in range(settings["micro_batch_size"]):
-                if cursor == len(order):
-                    rng.shuffle(order)
-                    cursor = 0
-                selected.append(encoded[order[cursor]])
-                cursor += 1
+    seed = config["seed"] + job_id * 1009 + client_id
+    for group in epoch_batches(len(encoded), settings, seed):
+        # Causal-LM loss uses labels shifted by one position. Weight each
+        # micro-batch by its valid target count, including the final short batch.
+        counts = [sum(label != -100 for i in indices for label in encoded[i]["labels"][1:])
+                  for indices in group]
+        group_tokens = sum(counts)
+        if not group_tokens or any(count == 0 for count in counts):
+            raise ValueError("A training micro-batch has no response targets")
+        for indices, count in zip(group, counts):
+            selected = [encoded[i] for i in indices]
             batch = collate(selected, pad_token_id, device)
             with _autocast(device):
                 loss = model(**batch).loss
             if not torch.isfinite(loss):
                 raise FloatingPointError(f"Non-finite client {client_id} training loss")
-            losses.append(float(loss.detach()))
-            scaler.scale(loss / settings["grad_accum"]).backward()
+            loss_sum += float(loss.detach()) * count
+            token_total += count
+            scaler.scale(loss * (count / group_tokens)).backward()
         scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_((p for p in model.parameters() if p.requires_grad), 1.0)
         scaler.step(optimizer)
@@ -131,4 +131,4 @@ def train_client(model, encoded: list[dict], config: dict, device: torch.device,
     if device.type == "cuda":
         torch.cuda.synchronize()
     elapsed = time.perf_counter() - started
-    return adapter_state(model), sum(losses) / len(losses), elapsed
+    return adapter_state(model), loss_sum / token_total, elapsed

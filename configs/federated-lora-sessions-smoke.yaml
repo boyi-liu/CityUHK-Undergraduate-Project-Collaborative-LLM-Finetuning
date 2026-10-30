@@ -13,11 +13,11 @@ model:
   lora_rank: 8
   lora_alpha: 16
   lora_dropout: 0.05
-  target_modules: [q_proj, v_proj]
+  target_modules: all-linear
 training:
-  local_steps: 2
+  local_epochs: 1
   micro_batch_size: 1
-  grad_accum: 1
+  grad_accum: 32
   learning_rate: 0.0002
 federation:
   mode: sync
@@ -27,6 +27,8 @@ federation:
   async_mix: 0.5
 sessions:
   enabled: true
+  availability: trace
+  participation: repeated
   trace_path: dataset/device_usage_traces.json
   trace_ids: [0, 1, 3, 4, 7, 8, 9, 11, 13, 14]
   time_basis: recorded_local
@@ -39,12 +41,13 @@ timing:
   agx_client_ids: [0, 7]
   speed_scale: 1.0
   upload_mbps: 1.0
-  dry_run_adapter_bytes: 2162688
+  dry_run_adapter_bytes: 17596416
 evaluation:
+  interval_seconds: 3600
   revision: c30699e8356da336a370243923dbaf21066bb9fe
   cache_dir: dataset/mmlu_raw
-  n_shot: 5
+  n_shot: 0
   max_length: 4096
   max_samples: 12
   subset_seed: 42
-output_dir: exp/federated-lora-sessions-smoke
+output_dir: exp/federated-lora-sessions-smoke-epoch

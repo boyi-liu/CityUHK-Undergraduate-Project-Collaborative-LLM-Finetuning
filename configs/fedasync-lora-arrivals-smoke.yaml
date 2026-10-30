@@ -1,0 +1,57 @@
+seed: 42
+data:
+  dataset: mmlu
+  revision: c30699e8356da336a370243923dbaf21066bb9fe
+  training_path: dataset/mmlu_train.jsonl
+  manifest_path: dataset/mmlu_train.manifest.json
+  subject_groups_path: dataset/mmlu_subject_groups.json
+  output_dir: dataset/mmlu_client_splits_smoke
+  max_examples: 120
+  dirichlet_alpha: 0.5
+model:
+  name: Qwen/Qwen2.5-0.5B
+  revision: 060db6499f32faf8b98477b0a26969ef7d8b9987
+  max_length: 128
+  lora_rank: 8
+  lora_alpha: 32
+  lora_dropout: 0.1
+  target_modules:
+  - q_proj
+  - v_proj
+training:
+  local_epochs: 1
+  micro_batch_size: 8
+  grad_accum: 1
+  learning_rate: 0.0002
+  optimizer: SGD
+  weight_decay: 0
+  proximal_rho: 0.005
+federation:
+  algorithm: fedasync_lora
+  mode: async
+  client_count: 5
+  max_updates: 10
+  mixing_alpha: 0.6
+  staleness:
+    function: polynomial
+    a: 0.5
+  simulation:
+    schedule: arrivals
+    client_job_seconds:
+    - 1.0
+    - 1.5
+    - 2.0
+    - 2.5
+    - 3.0
+evaluation:
+  revision: c30699e8356da336a370243923dbaf21066bb9fe
+  cache_dir: dataset/mmlu_raw
+  n_shot: 0
+  max_length: 4096
+  max_samples: 12
+  subset_seed: 42
+stopping:
+  rule: first_accuracy_drop
+  split: test
+  include_initial: true
+output_dir: exp/fedasync-lora-mmlu-arrivals-smoke

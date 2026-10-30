@@ -1,5 +1,8 @@
 # Synchronous LoRA baselines
 
+Later trace integration is documented in [the deadline report](trace-baselines.md).
+The results below retain the earlier standalone round experiments.
+
 ## Reference checks
 
 FFA-LoRA follows Section 4 and Appendix A.8 of
